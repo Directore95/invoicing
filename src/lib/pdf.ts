@@ -22,7 +22,7 @@ export async function exportInvoicePDF(elementId: string, filename: string): Pro
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mod = await import('html2canvas') as any;
+    const mod = await import('html2canvas-pro') as any;
     html2canvas = mod.default ?? mod;
     if (typeof html2canvas !== 'function') {
       throw new Error('html2canvas function not found. Module keys: ' + Object.keys(mod).join(', '));
