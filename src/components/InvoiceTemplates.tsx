@@ -1,11 +1,54 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Invoice } from '@/lib/types';
 import { formatCurrency, formatDate, t, Locale, regionConfig } from '@/lib/i18n';
+import { generatePaymentQR } from '@/lib/qrcode';
 
 interface TemplateProps {
   invoice: Invoice;
   locale: Locale;
+}
+
+function usePaymentQR(invoice: Invoice, locale: Locale) {
+  const [qrDataUrl, setQrDataUrl] = useState('');
+  useEffect(() => {
+    generatePaymentQR(invoice, locale).then(setQrDataUrl);
+  }, [invoice.companyIban, invoice.companyBankAccount, invoice.companyRoutingNumber, invoice.companySwiftCode, invoice.total, invoice.variableSymbol, invoice.invoiceNumber, invoice.companyName, locale]);
+  return qrDataUrl;
+}
+
+/** Stamp + Signature overlay: stamp at 60% opacity behind signature */
+function SignatureStampBlock({ invoice, locale, align = 'right' }: TemplateProps & { align?: 'left' | 'right' }) {
+  const hasStamp = !!invoice.companyStamp;
+  const hasSignature = !!invoice.companySignature;
+  if (!hasStamp && !hasSignature) return null;
+
+  return (
+    <div className={`text-center ${align === 'right' ? 'ml-auto' : ''}`}>
+      <div className="relative inline-block" style={{ minWidth: '140px', minHeight: '80px' }}>
+        {hasStamp && (
+          <img
+            src={invoice.companyStamp}
+            alt="Stamp"
+            className="absolute inset-0 w-full h-full object-contain"
+            style={{ opacity: 0.6 }}
+          />
+        )}
+        {hasSignature && (
+          <img
+            src={invoice.companySignature}
+            alt="Signature"
+            className="relative h-16 object-contain mx-auto"
+            style={{ zIndex: 1 }}
+          />
+        )}
+      </div>
+      <div className="border-t border-gray-300 mt-1 pt-1">
+        <p className="text-xs text-gray-400">{locale === 'en' ? 'Authorized Signature' : 'Podpis a pečiatka'}</p>
+      </div>
+    </div>
+  );
 }
 
 // ============================================================
@@ -13,6 +56,7 @@ interface TemplateProps {
 // ============================================================
 export function ModernTemplate({ invoice, locale }: TemplateProps) {
   const rc = regionConfig[locale];
+  const qrDataUrl = usePaymentQR(invoice, locale);
 
   return (
     <div className="bg-white p-8 max-w-[210mm] mx-auto text-sm" id="invoice-content">
@@ -175,29 +219,41 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
         </div>
       </div>
 
-      {/* Bank Details */}
+      {/* Bank Details + QR Code */}
       <div className="bg-gray-50 rounded-lg p-4 mb-6">
-        <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-2">
-          {t(locale, 'company.bankDetails')}
-        </p>
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          {invoice.companyBankName && (
-            <p className="text-gray-600"><span className="text-gray-400">{t(locale, 'company.bankName')}: </span>{invoice.companyBankName}</p>
-          )}
-          {locale === 'sk' && invoice.companyIban && (
-            <p className="text-gray-600"><span className="text-gray-400">IBAN: </span>{invoice.companyIban}</p>
-          )}
-          {locale === 'en' && invoice.companyBankAccount && (
-            <p className="text-gray-600"><span className="text-gray-400">Account: </span>{invoice.companyBankAccount}</p>
-          )}
-          {locale === 'en' && invoice.companyRoutingNumber && (
-            <p className="text-gray-600"><span className="text-gray-400">Routing: </span>{invoice.companyRoutingNumber}</p>
-          )}
-          {invoice.companySwiftCode && (
-            <p className="text-gray-600"><span className="text-gray-400">SWIFT/BIC: </span>{invoice.companySwiftCode}</p>
-          )}
-          {invoice.variableSymbol && locale === 'sk' && (
-            <p className="text-gray-600"><span className="text-gray-400">VS: </span>{invoice.variableSymbol}</p>
+        <div className="flex justify-between items-start">
+          <div>
+            <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-2">
+              {t(locale, 'company.bankDetails')}
+            </p>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              {invoice.companyBankName && (
+                <p className="text-gray-600"><span className="text-gray-400">{t(locale, 'company.bankName')}: </span>{invoice.companyBankName}</p>
+              )}
+              {locale === 'sk' && invoice.companyIban && (
+                <p className="text-gray-600"><span className="text-gray-400">IBAN: </span>{invoice.companyIban}</p>
+              )}
+              {locale === 'en' && invoice.companyBankAccount && (
+                <p className="text-gray-600"><span className="text-gray-400">Account: </span>{invoice.companyBankAccount}</p>
+              )}
+              {locale === 'en' && invoice.companyRoutingNumber && (
+                <p className="text-gray-600"><span className="text-gray-400">Routing: </span>{invoice.companyRoutingNumber}</p>
+              )}
+              {invoice.companySwiftCode && (
+                <p className="text-gray-600"><span className="text-gray-400">SWIFT/BIC: </span>{invoice.companySwiftCode}</p>
+              )}
+              {invoice.variableSymbol && locale === 'sk' && (
+                <p className="text-gray-600"><span className="text-gray-400">VS: </span>{invoice.variableSymbol}</p>
+              )}
+            </div>
+          </div>
+          {qrDataUrl && (
+            <div className="text-center ml-4 flex-shrink-0">
+              <img src={qrDataUrl} alt="Payment QR" className="w-28 h-28" />
+              <p className="text-[10px] text-gray-400 mt-1">
+                {locale === 'en' ? 'Scan to pay' : 'Naskenujte pre platbu'}
+              </p>
+            </div>
           )}
         </div>
       </div>
@@ -223,21 +279,9 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
         </div>
       )}
 
-      {/* Signature & Stamp */}
-      <div className="flex justify-end items-end gap-8 mt-8 pt-6 border-t border-gray-200">
-        {invoice.companyStamp && (
-          <div className="text-center">
-            <img src={invoice.companyStamp} alt="Stamp" className="h-20 object-contain opacity-80" />
-          </div>
-        )}
-        {invoice.companySignature && (
-          <div className="text-center">
-            <img src={invoice.companySignature} alt="Signature" className="h-16 object-contain" />
-            <div className="border-t border-gray-300 mt-1 pt-1">
-              <p className="text-xs text-gray-400">{locale === 'en' ? 'Authorized Signature' : 'Podpis'}</p>
-            </div>
-          </div>
-        )}
+      {/* Signature & Stamp overlay */}
+      <div className="flex justify-end items-end mt-8 pt-6 border-t border-gray-200">
+        <SignatureStampBlock invoice={invoice} locale={locale} />
       </div>
     </div>
   );
@@ -248,6 +292,7 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
 // ============================================================
 export function ClassicTemplate({ invoice, locale }: TemplateProps) {
   const rc = regionConfig[locale];
+  const qrDataUrl = usePaymentQR(invoice, locale);
 
   return (
     <div className="bg-white p-8 max-w-[210mm] mx-auto text-sm" id="invoice-content">
@@ -360,15 +405,27 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
 
       {/* Totals & Bank side by side */}
       <div className="grid grid-cols-2 gap-8 mb-8">
-        {/* Bank Details */}
+        {/* Bank Details + QR */}
         <div className="border border-gray-300 rounded p-3">
-          <h4 className="font-bold text-gray-800 text-xs uppercase mb-2">{t(locale, 'company.bankDetails')}</h4>
-          {invoice.companyBankName && <p className="text-gray-600 text-xs">{t(locale, 'company.bankName')}: {invoice.companyBankName}</p>}
-          {locale === 'sk' && invoice.companyIban && <p className="text-gray-600 text-xs">IBAN: {invoice.companyIban}</p>}
-          {locale === 'en' && invoice.companyBankAccount && <p className="text-gray-600 text-xs">Account: {invoice.companyBankAccount}</p>}
-          {locale === 'en' && invoice.companyRoutingNumber && <p className="text-gray-600 text-xs">Routing: {invoice.companyRoutingNumber}</p>}
-          {invoice.companySwiftCode && <p className="text-gray-600 text-xs">SWIFT: {invoice.companySwiftCode}</p>}
-          {invoice.paymentMethod && <p className="text-gray-600 text-xs mt-1">{t(locale, 'invoice.paymentMethod')}: {invoice.paymentMethod}</p>}
+          <div className="flex justify-between items-start">
+            <div>
+              <h4 className="font-bold text-gray-800 text-xs uppercase mb-2">{t(locale, 'company.bankDetails')}</h4>
+              {invoice.companyBankName && <p className="text-gray-600 text-xs">{t(locale, 'company.bankName')}: {invoice.companyBankName}</p>}
+              {locale === 'sk' && invoice.companyIban && <p className="text-gray-600 text-xs">IBAN: {invoice.companyIban}</p>}
+              {locale === 'en' && invoice.companyBankAccount && <p className="text-gray-600 text-xs">Account: {invoice.companyBankAccount}</p>}
+              {locale === 'en' && invoice.companyRoutingNumber && <p className="text-gray-600 text-xs">Routing: {invoice.companyRoutingNumber}</p>}
+              {invoice.companySwiftCode && <p className="text-gray-600 text-xs">SWIFT: {invoice.companySwiftCode}</p>}
+              {invoice.paymentMethod && <p className="text-gray-600 text-xs mt-1">{t(locale, 'invoice.paymentMethod')}: {invoice.paymentMethod}</p>}
+            </div>
+            {qrDataUrl && (
+              <div className="text-center ml-3 flex-shrink-0">
+                <img src={qrDataUrl} alt="Payment QR" className="w-24 h-24" />
+                <p className="text-[10px] text-gray-400 mt-0.5">
+                  {locale === 'en' ? 'Scan to pay' : 'Naskenujte'}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Totals */}
@@ -410,21 +467,9 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
         </div>
       )}
 
-      {/* Signature & Stamp */}
-      <div className="flex justify-between items-end mt-8 pt-4 border-t border-gray-300">
-        <div>
-          {invoice.companyStamp && (
-            <img src={invoice.companyStamp} alt="Stamp" className="h-20 object-contain opacity-80" />
-          )}
-        </div>
-        <div className="text-center">
-          {invoice.companySignature && (
-            <img src={invoice.companySignature} alt="Signature" className="h-16 object-contain" />
-          )}
-          <div className="border-t border-gray-400 w-48 mt-2 pt-1">
-            <p className="text-xs text-gray-500">{locale === 'en' ? 'Authorized Signature' : 'Podpis a pečiatka'}</p>
-          </div>
-        </div>
+      {/* Signature & Stamp overlay */}
+      <div className="flex justify-end items-end mt-8 pt-4 border-t border-gray-300">
+        <SignatureStampBlock invoice={invoice} locale={locale} />
       </div>
     </div>
   );
@@ -435,6 +480,7 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
 // ============================================================
 export function MinimalTemplate({ invoice, locale }: TemplateProps) {
   const rc = regionConfig[locale];
+  const qrDataUrl = usePaymentQR(invoice, locale);
 
   return (
     <div className="bg-white p-10 max-w-[210mm] mx-auto text-sm font-light" id="invoice-content">
@@ -518,20 +564,32 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
         </div>
       </div>
 
-      {/* Bank & Payment */}
-      <div className="border-t border-gray-100 pt-6 mb-6 text-xs text-gray-400">
-        <div className="flex gap-8">
-          <div>
-            {invoice.companyBankName && <p>{t(locale, 'company.bankName')}: {invoice.companyBankName}</p>}
-            {locale === 'sk' && invoice.companyIban && <p>IBAN: {invoice.companyIban}</p>}
-            {locale === 'en' && invoice.companyBankAccount && <p>Account: {invoice.companyBankAccount}</p>}
-            {locale === 'en' && invoice.companyRoutingNumber && <p>Routing: {invoice.companyRoutingNumber}</p>}
-            {invoice.companySwiftCode && <p>SWIFT: {invoice.companySwiftCode}</p>}
+      {/* Bank & Payment + QR */}
+      <div className="border-t border-gray-100 pt-6 mb-6">
+        <div className="flex justify-between items-start">
+          <div className="text-xs text-gray-400">
+            <div className="flex gap-8">
+              <div>
+                {invoice.companyBankName && <p>{t(locale, 'company.bankName')}: {invoice.companyBankName}</p>}
+                {locale === 'sk' && invoice.companyIban && <p>IBAN: {invoice.companyIban}</p>}
+                {locale === 'en' && invoice.companyBankAccount && <p>Account: {invoice.companyBankAccount}</p>}
+                {locale === 'en' && invoice.companyRoutingNumber && <p>Routing: {invoice.companyRoutingNumber}</p>}
+                {invoice.companySwiftCode && <p>SWIFT: {invoice.companySwiftCode}</p>}
+              </div>
+              {(invoice.variableSymbol || invoice.constantSymbol) && locale === 'sk' && (
+                <div>
+                  {invoice.variableSymbol && <p>VS: {invoice.variableSymbol}</p>}
+                  {invoice.constantSymbol && <p>KS: {invoice.constantSymbol}</p>}
+                </div>
+              )}
+            </div>
           </div>
-          {(invoice.variableSymbol || invoice.constantSymbol) && locale === 'sk' && (
-            <div>
-              {invoice.variableSymbol && <p>VS: {invoice.variableSymbol}</p>}
-              {invoice.constantSymbol && <p>KS: {invoice.constantSymbol}</p>}
+          {qrDataUrl && (
+            <div className="text-center flex-shrink-0">
+              <img src={qrDataUrl} alt="Payment QR" className="w-24 h-24" />
+              <p className="text-[10px] text-gray-300 mt-0.5">
+                {locale === 'en' ? 'Scan to pay' : 'Naskenujte'}
+              </p>
             </div>
           )}
         </div>
@@ -541,19 +599,9 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
       {invoice.notes && <p className="text-gray-400 text-xs mb-2 whitespace-pre-wrap">{invoice.notes}</p>}
       {invoice.terms && <p className="text-gray-300 text-xs whitespace-pre-wrap">{invoice.terms}</p>}
 
-      {/* Signature & Stamp */}
-      <div className="flex justify-end items-end gap-6 mt-12">
-        {invoice.companyStamp && (
-          <img src={invoice.companyStamp} alt="Stamp" className="h-16 object-contain opacity-60" />
-        )}
-        {invoice.companySignature && (
-          <div className="text-center">
-            <img src={invoice.companySignature} alt="Signature" className="h-14 object-contain" />
-            <div className="border-t border-gray-200 mt-1 pt-1 w-40">
-              <p className="text-xs text-gray-300">{locale === 'en' ? 'Signature' : 'Podpis'}</p>
-            </div>
-          </div>
-        )}
+      {/* Signature & Stamp overlay */}
+      <div className="flex justify-end items-end mt-12">
+        <SignatureStampBlock invoice={invoice} locale={locale} />
       </div>
     </div>
   );

@@ -38,17 +38,22 @@ function buildInvoiceFromCompany(company: Company, locale: Locale): Partial<Invo
   };
 }
 
-function emptyInvoice(locale: Locale, invoiceNumber: string): Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'> {
+function calcDueDate(invoiceDate: string, paymentTermsDays: number): string {
+  const d = new Date(invoiceDate);
+  d.setDate(d.getDate() + paymentTermsDays);
+  return d.toISOString().split('T')[0];
+}
+
+function emptyInvoice(locale: Locale, invoiceNumber: string, paymentTerms: number = 30): Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'> {
   const rc = regionConfig[locale];
   const today = new Date();
-  const dueDate = new Date();
-  dueDate.setDate(today.getDate() + 30);
+  const todayStr = today.toISOString().split('T')[0];
 
   return {
     locale,
     invoiceNumber,
-    invoiceDate: today.toISOString().split('T')[0],
-    dueDate: dueDate.toISOString().split('T')[0],
+    invoiceDate: todayStr,
+    dueDate: calcDueDate(todayStr, paymentTerms),
     companyId: '',
     companyName: '',
     companyLegalName: '',
@@ -112,8 +117,9 @@ export default function InvoiceFormPage() {
 
   const [form, setForm] = useState<Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>>(() => {
     if (existing) return { ...existing };
-    const inv = emptyInvoice(locale, getNextInvoiceNumber());
     const defaultCompany = getDefaultCompany();
+    const paymentTerms = defaultCompany?.defaultPaymentTerms ?? settings.defaultPaymentTerms;
+    const inv = emptyInvoice(locale, getNextInvoiceNumber(), paymentTerms);
     if (defaultCompany) {
       return { ...inv, ...buildInvoiceFromCompany(defaultCompany, locale) };
     }
@@ -143,7 +149,9 @@ export default function InvoiceFormPage() {
   const handleCompanySelect = (companyId: string) => {
     const company = companies.find((c) => c.id === companyId);
     if (company) {
-      updateForm(buildInvoiceFromCompany(company, locale));
+      const companyData = buildInvoiceFromCompany(company, locale);
+      const newDueDate = calcDueDate(form.invoiceDate, company.defaultPaymentTerms);
+      updateForm({ ...companyData, dueDate: newDueDate });
     }
   };
 
@@ -254,7 +262,12 @@ export default function InvoiceFormPage() {
                 <input
                   type="date"
                   value={form.invoiceDate}
-                  onChange={(e) => updateForm({ invoiceDate: e.target.value })}
+                  onChange={(e) => {
+                    const newDate = e.target.value;
+                    const selectedCompany = companies.find((c) => c.id === form.companyId);
+                    const terms = selectedCompany?.defaultPaymentTerms ?? settings.defaultPaymentTerms;
+                    updateForm({ invoiceDate: newDate, dueDate: calcDueDate(newDate, terms) });
+                  }}
                   className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
