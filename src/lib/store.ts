@@ -1,10 +1,75 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
-import { Company, Invoice, InvoiceItem, InvoiceStatus, AppSettings, defaultSettings } from './types';
+import {
+  collection,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  onSnapshot,
+  query,
+  getDoc,
+} from 'firebase/firestore';
+import { db } from './firebase';
+import { Company, Invoice, InvoiceStatus, AppSettings, defaultSettings } from './types';
 import { Locale, regionConfig } from './i18n';
 
+// ============================================================
+// Firestore paths helper
+// ============================================================
+function userDoc(userId: string) {
+  return doc(db, 'users', userId);
+}
+function companiesCol(userId: string) {
+  return collection(db, 'users', userId, 'companies');
+}
+function companyDoc(userId: string, companyId: string) {
+  return doc(db, 'users', userId, 'companies', companyId);
+}
+function invoicesCol(userId: string) {
+  return collection(db, 'users', userId, 'invoices');
+}
+function invoiceDoc(userId: string, invoiceId: string) {
+  return doc(db, 'users', userId, 'invoices', invoiceId);
+}
+function partnersCol(userId: string) {
+  return collection(db, 'users', userId, 'partners');
+}
+function partnerDoc(userId: string, partnerId: string) {
+  return doc(db, 'users', userId, 'partners', partnerId);
+}
+
+// ============================================================
+// Partner type (reusable client profiles)
+// ============================================================
+export interface Partner {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+  phone: string;
+  taxId: string;
+  registrationNumber: string;
+  vatId: string;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ============================================================
+// Store interface
+// ============================================================
 interface AppStore {
+  // Auth
+  userId: string | null;
+  setUserId: (userId: string | null) => void;
+  firestoreReady: boolean;
+
   // Settings
   settings: AppSettings;
   updateSettings: (settings: Partial<AppSettings>) => void;
@@ -18,6 +83,12 @@ interface AppStore {
   setDefaultCompany: (id: string) => void;
   getDefaultCompany: () => Company | undefined;
 
+  // Partners
+  partners: Partner[];
+  addPartner: (partner: Omit<Partner, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) => Partner;
+  updatePartner: (id: string, data: Partial<Partner>) => void;
+  deletePartner: (id: string) => void;
+
   // Invoices
   invoices: Invoice[];
   addInvoice: (invoice: Omit<Invoice, 'id' | 'createdAt' | 'updatedAt'>) => Invoice;
@@ -26,142 +97,318 @@ interface AppStore {
   cloneInvoice: (id: string) => Invoice;
   updateInvoiceStatus: (id: string, status: InvoiceStatus) => void;
   getNextInvoiceNumber: () => string;
+
+  // Firestore listeners
+  _unsubscribers: (() => void)[];
+  subscribeToFirestore: (userId: string) => void;
+  unsubscribeFromFirestore: () => void;
 }
 
-export const useStore = create<AppStore>()(
-  persist(
-    (set, get) => ({
-      // Settings
-      settings: defaultSettings,
-      updateSettings: (updates) =>
-        set((state) => ({
-          settings: { ...state.settings, ...updates },
-        })),
-      setLocale: (locale) =>
-        set((state) => ({
-          settings: {
-            ...state.settings,
-            locale,
-            defaultTaxRate: regionConfig[locale].defaultTaxRate,
-          },
-        })),
+// ============================================================
+// Zustand store - synced with Firestore
+// ============================================================
+export const useStore = create<AppStore>()((set, get) => ({
+  // Auth
+  userId: null,
+  firestoreReady: false,
+  setUserId: (userId) => {
+    const prev = get().userId;
+    if (prev === userId) return;
 
-      // Companies
-      companies: [],
-      addCompany: (companyData) => {
-        const now = new Date().toISOString();
-        const company: Company = {
-          ...companyData,
-          id: uuidv4(),
-          createdAt: now,
-          updatedAt: now,
-        };
-        set((state) => ({
-          companies: [...state.companies, company],
-        }));
-        return company;
-      },
-      updateCompany: (id, data) =>
-        set((state) => ({
-          companies: state.companies.map((c) =>
-            c.id === id ? { ...c, ...data, updatedAt: new Date().toISOString() } : c
-          ),
-        })),
-      deleteCompany: (id) =>
-        set((state) => ({
-          companies: state.companies.filter((c) => c.id !== id),
-        })),
-      setDefaultCompany: (id) =>
-        set((state) => ({
-          companies: state.companies.map((c) => ({
-            ...c,
-            isDefault: c.id === id,
-          })),
-        })),
-      getDefaultCompany: () => {
-        const { companies } = get();
-        return companies.find((c) => c.isDefault) || companies[0];
-      },
+    // Unsubscribe from previous user's data
+    get().unsubscribeFromFirestore();
 
-      // Invoices
-      invoices: [],
-      addInvoice: (invoiceData) => {
-        const now = new Date().toISOString();
-        const invoice: Invoice = {
-          ...invoiceData,
-          id: uuidv4(),
-          createdAt: now,
-          updatedAt: now,
-        };
-        set((state) => ({
-          invoices: [...state.invoices, invoice],
-          settings: {
-            ...state.settings,
-            nextInvoiceNumber: state.settings.nextInvoiceNumber + 1,
-          },
-        }));
-        return invoice;
-      },
-      updateInvoice: (id, data) =>
-        set((state) => ({
-          invoices: state.invoices.map((inv) =>
-            inv.id === id ? { ...inv, ...data, updatedAt: new Date().toISOString() } : inv
-          ),
-        })),
-      deleteInvoice: (id) =>
-        set((state) => ({
-          invoices: state.invoices.filter((inv) => inv.id !== id),
-        })),
-      cloneInvoice: (id) => {
-        const state = get();
-        const original = state.invoices.find((inv) => inv.id === id);
-        if (!original) throw new Error('Invoice not found');
-        const now = new Date().toISOString();
-        const today = new Date();
-        const dueDate = new Date();
-        dueDate.setDate(today.getDate() + (state.settings.defaultPaymentTerms || 30));
-
-        const cloned: Invoice = {
-          ...original,
-          id: uuidv4(),
-          invoiceNumber: state.getNextInvoiceNumber(),
-          invoiceDate: today.toISOString().split('T')[0],
-          dueDate: dueDate.toISOString().split('T')[0],
-          status: 'draft',
-          paidAt: null,
-          items: original.items.map((item) => ({ ...item, id: uuidv4() })),
-          createdAt: now,
-          updatedAt: now,
-        };
-        set((s) => ({
-          invoices: [...s.invoices, cloned],
-          settings: {
-            ...s.settings,
-            nextInvoiceNumber: s.settings.nextInvoiceNumber + 1,
-          },
-        }));
-        return cloned;
-      },
-      updateInvoiceStatus: (id, status) =>
-        set((state) => ({
-          invoices: state.invoices.map((inv) =>
-            inv.id === id
-              ? {
-                  ...inv,
-                  status,
-                  paidAt: status === 'paid' ? new Date().toISOString() : inv.paidAt,
-                  updatedAt: new Date().toISOString(),
-                }
-              : inv
-          ),
-        })),
-      getNextInvoiceNumber: () => {
-        const { settings } = get();
-        return `${settings.invoicePrefix}${String(settings.nextInvoiceNumber).padStart(4, '0')}`;
-      },
-    }),
-    {
-      name: 'invoicing-app-storage',
+    if (userId) {
+      set({ userId, firestoreReady: false });
+      get().subscribeToFirestore(userId);
+    } else {
+      set({
+        userId: null,
+        firestoreReady: false,
+        companies: [],
+        invoices: [],
+        partners: [],
+        settings: defaultSettings,
+      });
     }
-  )
-);
+  },
+
+  // Settings
+  settings: defaultSettings,
+  updateSettings: (updates) => {
+    set((state) => ({
+      settings: { ...state.settings, ...updates },
+    }));
+    // Persist to Firestore
+    const { userId, settings } = get();
+    if (userId) {
+      const merged = { ...settings, ...updates };
+      setDoc(userDoc(userId), { ...merged, userId }, { merge: true });
+    }
+  },
+  setLocale: (locale) => {
+    const updates = {
+      locale,
+      defaultTaxRate: regionConfig[locale].defaultTaxRate,
+    };
+    get().updateSettings(updates);
+  },
+
+  // Companies
+  companies: [],
+  addCompany: (companyData) => {
+    const { userId } = get();
+    const now = new Date().toISOString();
+    const id = uuidv4();
+    const company: Company = {
+      ...companyData,
+      id,
+      createdAt: now,
+      updatedAt: now,
+    };
+    // Optimistic local update
+    set((state) => ({ companies: [...state.companies, company] }));
+    // Persist
+    if (userId) {
+      setDoc(companyDoc(userId, id), { ...company, userId });
+    }
+    return company;
+  },
+  updateCompany: (id, data) => {
+    set((state) => ({
+      companies: state.companies.map((c) =>
+        c.id === id ? { ...c, ...data, updatedAt: new Date().toISOString() } : c
+      ),
+    }));
+    const { userId } = get();
+    if (userId) {
+      updateDoc(companyDoc(userId, id), { ...data, updatedAt: new Date().toISOString() });
+    }
+  },
+  deleteCompany: (id) => {
+    set((state) => ({ companies: state.companies.filter((c) => c.id !== id) }));
+    const { userId } = get();
+    if (userId) deleteDoc(companyDoc(userId, id));
+  },
+  setDefaultCompany: (id) => {
+    const { companies, userId } = get();
+    const updated = companies.map((c) => ({ ...c, isDefault: c.id === id }));
+    set({ companies: updated });
+    if (userId) {
+      updated.forEach((c) => {
+        updateDoc(companyDoc(userId, c.id), { isDefault: c.isDefault });
+      });
+    }
+  },
+  getDefaultCompany: () => {
+    const { companies } = get();
+    return companies.find((c) => c.isDefault) || companies[0];
+  },
+
+  // Partners
+  partners: [],
+  addPartner: (partnerData) => {
+    const { userId } = get();
+    const now = new Date().toISOString();
+    const id = uuidv4();
+    const partner: Partner = {
+      ...partnerData,
+      id,
+      userId: userId || '',
+      createdAt: now,
+      updatedAt: now,
+    };
+    set((state) => ({ partners: [...state.partners, partner] }));
+    if (userId) {
+      setDoc(partnerDoc(userId, id), partner);
+    }
+    return partner;
+  },
+  updatePartner: (id, data) => {
+    set((state) => ({
+      partners: state.partners.map((p) =>
+        p.id === id ? { ...p, ...data, updatedAt: new Date().toISOString() } : p
+      ),
+    }));
+    const { userId } = get();
+    if (userId) {
+      updateDoc(partnerDoc(userId, id), { ...data, updatedAt: new Date().toISOString() });
+    }
+  },
+  deletePartner: (id) => {
+    set((state) => ({ partners: state.partners.filter((p) => p.id !== id) }));
+    const { userId } = get();
+    if (userId) deleteDoc(partnerDoc(userId, id));
+  },
+
+  // Invoices
+  invoices: [],
+  addInvoice: (invoiceData) => {
+    const { userId } = get();
+    const now = new Date().toISOString();
+    const id = uuidv4();
+    const invoice: Invoice = {
+      ...invoiceData,
+      id,
+      createdAt: now,
+      updatedAt: now,
+    };
+    set((state) => ({
+      invoices: [...state.invoices, invoice],
+      settings: {
+        ...state.settings,
+        nextInvoiceNumber: state.settings.nextInvoiceNumber + 1,
+      },
+    }));
+    if (userId) {
+      setDoc(invoiceDoc(userId, id), { ...invoice, userId });
+      // Also update the next invoice number in settings
+      const { settings } = get();
+      setDoc(userDoc(userId), { ...settings, userId }, { merge: true });
+    }
+    return invoice;
+  },
+  updateInvoice: (id, data) => {
+    set((state) => ({
+      invoices: state.invoices.map((inv) =>
+        inv.id === id ? { ...inv, ...data, updatedAt: new Date().toISOString() } : inv
+      ),
+    }));
+    const { userId } = get();
+    if (userId) {
+      updateDoc(invoiceDoc(userId, id), { ...data, updatedAt: new Date().toISOString() });
+    }
+  },
+  deleteInvoice: (id) => {
+    set((state) => ({ invoices: state.invoices.filter((inv) => inv.id !== id) }));
+    const { userId } = get();
+    if (userId) deleteDoc(invoiceDoc(userId, id));
+  },
+  cloneInvoice: (id) => {
+    const state = get();
+    const original = state.invoices.find((inv) => inv.id === id);
+    if (!original) throw new Error('Invoice not found');
+    const now = new Date().toISOString();
+    const today = new Date();
+    const dueDate = new Date();
+    dueDate.setDate(today.getDate() + (state.settings.defaultPaymentTerms || 30));
+
+    const newId = uuidv4();
+    const cloned: Invoice = {
+      ...original,
+      id: newId,
+      invoiceNumber: state.getNextInvoiceNumber(),
+      invoiceDate: today.toISOString().split('T')[0],
+      dueDate: dueDate.toISOString().split('T')[0],
+      status: 'draft',
+      paidAt: null,
+      items: original.items.map((item) => ({ ...item, id: uuidv4() })),
+      createdAt: now,
+      updatedAt: now,
+    };
+    set((s) => ({
+      invoices: [...s.invoices, cloned],
+      settings: {
+        ...s.settings,
+        nextInvoiceNumber: s.settings.nextInvoiceNumber + 1,
+      },
+    }));
+    const { userId } = get();
+    if (userId) {
+      setDoc(invoiceDoc(userId, newId), { ...cloned, userId });
+      const { settings } = get();
+      setDoc(userDoc(userId), { ...settings, userId }, { merge: true });
+    }
+    return cloned;
+  },
+  updateInvoiceStatus: (id, status) => {
+    const now = new Date().toISOString();
+    const paidAt = status === 'paid' ? now : null;
+    set((state) => ({
+      invoices: state.invoices.map((inv) =>
+        inv.id === id
+          ? { ...inv, status, paidAt: paidAt ?? inv.paidAt, updatedAt: now }
+          : inv
+      ),
+    }));
+    const { userId } = get();
+    if (userId) {
+      const inv = get().invoices.find((i) => i.id === id);
+      if (inv) {
+        updateDoc(invoiceDoc(userId, id), { status, paidAt: inv.paidAt, updatedAt: now });
+      }
+    }
+  },
+  getNextInvoiceNumber: () => {
+    const { settings } = get();
+    return `${settings.invoicePrefix}${String(settings.nextInvoiceNumber).padStart(4, '0')}`;
+  },
+
+  // ============================================================
+  // Firestore real-time listeners
+  // ============================================================
+  _unsubscribers: [],
+  subscribeToFirestore: (userId: string) => {
+    const unsubs: (() => void)[] = [];
+
+    // Listen to user settings
+    const unsubSettings = onSnapshot(userDoc(userId), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const settings: AppSettings = {
+          locale: data.locale || defaultSettings.locale,
+          invoicePrefix: data.invoicePrefix || defaultSettings.invoicePrefix,
+          nextInvoiceNumber: data.nextInvoiceNumber ?? defaultSettings.nextInvoiceNumber,
+          defaultTaxRate: data.defaultTaxRate ?? defaultSettings.defaultTaxRate,
+          defaultPaymentTerms: data.defaultPaymentTerms ?? defaultSettings.defaultPaymentTerms,
+          defaultNotes: data.defaultNotes || defaultSettings.defaultNotes,
+          defaultTerms: data.defaultTerms || defaultSettings.defaultTerms,
+          defaultTemplate: data.defaultTemplate || defaultSettings.defaultTemplate,
+        };
+        set({ settings });
+      } else {
+        // First login - create settings doc
+        setDoc(userDoc(userId), { ...defaultSettings, userId });
+      }
+    });
+    unsubs.push(unsubSettings);
+
+    // Listen to companies
+    const unsubCompanies = onSnapshot(query(companiesCol(userId)), (snap) => {
+      const companies: Company[] = snap.docs.map((d) => {
+        const data = d.data();
+        return { ...data, id: d.id } as Company;
+      });
+      set({ companies });
+    });
+    unsubs.push(unsubCompanies);
+
+    // Listen to invoices
+    const unsubInvoices = onSnapshot(query(invoicesCol(userId)), (snap) => {
+      const invoices: Invoice[] = snap.docs.map((d) => {
+        const data = d.data();
+        return { ...data, id: d.id } as Invoice;
+      });
+      set({ invoices });
+    });
+    unsubs.push(unsubInvoices);
+
+    // Listen to partners
+    const unsubPartners = onSnapshot(query(partnersCol(userId)), (snap) => {
+      const partners: Partner[] = snap.docs.map((d) => {
+        const data = d.data();
+        return { ...data, id: d.id } as Partner;
+      });
+      set({ partners });
+    });
+    unsubs.push(unsubPartners);
+
+    set({ _unsubscribers: unsubs, firestoreReady: true });
+  },
+
+  unsubscribeFromFirestore: () => {
+    const { _unsubscribers } = get();
+    _unsubscribers.forEach((unsub) => unsub());
+    set({ _unsubscribers: [] });
+  },
+}));

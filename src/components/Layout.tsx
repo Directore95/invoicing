@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/lib/store';
+import { useAuth } from '@/lib/auth';
 import { t, Locale } from '@/lib/i18n';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { settings, setLocale } = useStore();
+  const { user, signOut } = useAuth();
   const locale = settings.locale;
 
   const navItems = [
@@ -78,12 +80,31 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className="p-4 border-t border-gray-200">
-          <div className="text-xs text-gray-400">
+          <div className="flex items-center gap-2 mb-2">
+            {user?.photoURL ? (
+              <img src={user.photoURL} alt="" className="w-6 h-6 rounded-full" referrerPolicy="no-referrer" />
+            ) : (
+              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
+                <span className="text-xs font-bold text-blue-600">
+                  {(user?.displayName || user?.email || '?').charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
+            <span className="text-xs text-gray-700 font-medium truncate flex-1">
+              {user?.displayName || user?.email}
+            </span>
+          </div>
+          <div className="text-xs text-gray-400 mb-2">
             {locale === 'en' ? 'Region: United States' : 'Región: Slovensko'}
+            {' · '}
+            {locale === 'en' ? 'USD ($)' : 'EUR (€)'}
           </div>
-          <div className="text-xs text-gray-400">
-            {locale === 'en' ? 'Currency: USD ($)' : 'Mena: EUR (€)'}
-          </div>
+          <button
+            onClick={signOut}
+            className="w-full text-xs text-gray-500 hover:text-red-600 hover:bg-red-50 py-1.5 rounded-lg transition-colors"
+          >
+            {locale === 'en' ? 'Sign Out' : 'Odhlásiť sa'}
+          </button>
         </div>
       </aside>
 
