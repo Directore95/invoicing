@@ -364,6 +364,7 @@ export const useStore = create<AppStore>()((set, get) => ({
           defaultNotes: data.defaultNotes || defaultSettings.defaultNotes,
           defaultTerms: data.defaultTerms || defaultSettings.defaultTerms,
           defaultTemplate: data.defaultTemplate || defaultSettings.defaultTemplate,
+          theme: data.theme || defaultSettings.theme,
         };
         set({ settings });
       } else {

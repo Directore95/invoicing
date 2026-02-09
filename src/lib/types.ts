@@ -123,6 +123,7 @@ export interface Invoice {
 }
 
 export type InvoiceTemplate = 'modern' | 'classic' | 'minimal';
+export type Theme = 'light' | 'dark';
 
 export interface AppSettings {
   locale: Locale;
@@ -133,6 +134,7 @@ export interface AppSettings {
   defaultNotes: string;
   defaultTerms: string;
   defaultTemplate: InvoiceTemplate;
+  theme: Theme;
 }
 
 export const defaultSettings: AppSettings = {
@@ -144,4 +146,5 @@ export const defaultSettings: AppSettings = {
   defaultNotes: '',
   defaultTerms: '',
   defaultTemplate: 'modern',
+  theme: 'light',
 };

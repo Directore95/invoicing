@@ -27,11 +27,11 @@ export default function ImageUpload({ value, onChange, label, hint, className = 
 
   return (
     <div className={className}>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      {hint && <p className="text-xs text-gray-400 mb-2">{hint}</p>}
+      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{label}</label>
+      {hint && <p className="text-xs text-gray-400 dark:text-slate-500 mb-2">{hint}</p>}
       {value ? (
         <div className="relative inline-block">
-          <img src={value} alt={label} className="h-24 object-contain border border-gray-200 rounded-lg p-2 bg-white" />
+          <img src={value} alt={label} className="h-24 object-contain border border-gray-200 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-700" />
           <button
             type="button"
             onClick={() => { onChange(''); if (inputRef.current) inputRef.current.value = ''; }}
@@ -44,13 +44,13 @@ export default function ImageUpload({ value, onChange, label, hint, className = 
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="border-2 border-dashed border-gray-300 rounded-lg p-6 w-full text-center hover:border-blue-400 hover:bg-blue-50 transition-colors cursor-pointer"
+          className="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg p-6 w-full text-center hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer"
         >
-          <svg className="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <svg className="w-8 h-8 mx-auto text-gray-400 dark:text-slate-500 mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
           </svg>
-          <p className="text-sm text-gray-500">Click to upload</p>
-          <p className="text-xs text-gray-400 mt-1">PNG, JPG up to 2MB</p>
+          <p className="text-sm text-gray-500 dark:text-slate-400">Click to upload</p>
+          <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">PNG, JPG up to 2MB</p>
         </button>
       )}
       <input
