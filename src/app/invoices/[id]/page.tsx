@@ -36,9 +36,12 @@ export default function InvoiceDetailPage() {
     setExporting(true);
     try {
       await exportInvoicePDF('invoice-content', `${invoice.invoiceNumber}.pdf`);
-    } catch (error) {
-      console.error('PDF export failed:', error);
-      alert(locale === 'en' ? 'PDF export failed. Please try again.' : 'Export PDF zlyhal. Skúste to znova.');
+    } catch (error: any) {
+      console.error('PDF export failed:', error?.message || error, error?.stack);
+      const msg = locale === 'en'
+        ? `PDF export failed: ${error?.message || 'Unknown error'}. Check console for details.`
+        : `Export PDF zlyhal: ${error?.message || 'Neznáma chyba'}. Skontrolujte konzolu pre detaily.`;
+      alert(msg);
     } finally {
       setExporting(false);
     }
