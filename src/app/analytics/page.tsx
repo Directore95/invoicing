@@ -93,8 +93,8 @@ export default function AnalyticsPage() {
   return (
     <Layout>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">{t(locale, 'analytics.title')}</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t(locale, 'analytics.title')}</h1>
+        <p className="text-gray-500 dark:text-slate-400 mt-1">
           {locale === 'en' ? 'Track your income and business performance' : 'Sledujte vaše príjmy a výkon podnikania'}
         </p>
       </div>
@@ -133,8 +133,8 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Monthly Revenue Chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">{t(locale, 'analytics.revenueByMonth')}</h3>
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t(locale, 'analytics.revenueByMonth')}</h3>
           {Object.keys(analytics.monthlyRevenue).length > 0 ? (
             <div className="space-y-2">
               {Object.entries(analytics.monthlyRevenue).map(([key, amount]) => {
@@ -143,8 +143,8 @@ export default function AnalyticsPage() {
                 const label = d.toLocaleDateString(locale === 'en' ? 'en-US' : 'sk-SK', { month: 'short', year: '2-digit' });
                 return (
                   <div key={key} className="flex items-center gap-3">
-                    <span className="w-14 text-xs text-gray-500 text-right font-mono">{label}</span>
-                    <div className="flex-1 bg-gray-100 rounded-full h-5 relative overflow-hidden">
+                    <span className="w-14 text-xs text-gray-500 dark:text-slate-400 text-right font-mono">{label}</span>
+                    <div className="flex-1 bg-gray-100 dark:bg-slate-700 rounded-full h-5 relative overflow-hidden">
                       <div
                         className="bg-blue-500 h-5 rounded-full transition-all duration-500"
                         style={{ width: `${(amount / maxMonthly) * 100}%` }}
@@ -156,13 +156,13 @@ export default function AnalyticsPage() {
               })}
             </div>
           ) : (
-            <p className="text-gray-400 text-center py-8">{t(locale, 'common.noData')}</p>
+            <p className="text-gray-400 dark:text-slate-500 text-center py-8">{t(locale, 'common.noData')}</p>
           )}
         </div>
 
         {/* Status Distribution */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">{t(locale, 'analytics.invoicesByStatus')}</h3>
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t(locale, 'analytics.invoicesByStatus')}</h3>
           {analytics.totalInvoices > 0 ? (
             <div className="space-y-4">
               {/* Visual bar */}
@@ -207,46 +207,46 @@ export default function AnalyticsPage() {
               </div>
             </div>
           ) : (
-            <p className="text-gray-400 text-center py-8">{t(locale, 'common.noData')}</p>
+            <p className="text-gray-400 dark:text-slate-500 text-center py-8">{t(locale, 'common.noData')}</p>
           )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Top Clients */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">{t(locale, 'analytics.topClients')}</h3>
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t(locale, 'analytics.topClients')}</h3>
           {analytics.topClients.length > 0 ? (
             <div className="space-y-3">
               {analytics.topClients.map((client, idx) => (
                 <div key={client.name} className="flex items-center gap-3">
-                  <span className="w-6 text-xs text-gray-400 text-right">{idx + 1}.</span>
+                  <span className="w-6 text-xs text-gray-400 dark:text-slate-500 text-right">{idx + 1}.</span>
                   <div className="flex-1">
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm font-medium text-gray-900">{client.name}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{client.name}</span>
                       <span className="text-sm font-medium">{formatCurrency(client.amount, locale)}</span>
                     </div>
-                    <div className="bg-gray-100 rounded-full h-2">
+                    <div className="bg-gray-100 dark:bg-slate-700 rounded-full h-2">
                       <div
                         className="bg-green-500 h-2 rounded-full transition-all"
                         style={{ width: `${(client.amount / maxClientAmount) * 100}%` }}
                       />
                     </div>
-                    <span className="text-xs text-gray-400">
-                      {client.count} {locale === 'en' ? 'invoices' : 'faktúr'}
+                    <span className="text-xs text-gray-400 dark:text-slate-500">
+                      {client.count} {locale === 'en' ? 'invoices' : 'faktur'}
                     </span>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-400 text-center py-8">{t(locale, 'common.noData')}</p>
+            <p className="text-gray-400 dark:text-slate-500 text-center py-8">{t(locale, 'common.noData')}</p>
           )}
         </div>
 
         {/* Income by Company */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">{t(locale, 'analytics.incomeStreams')}</h3>
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t(locale, 'analytics.incomeStreams')}</h3>
           {analytics.byCompany.length > 0 ? (
             <div className="space-y-4">
               {analytics.byCompany.map((company) => {
@@ -254,13 +254,13 @@ export default function AnalyticsPage() {
                 return (
                   <div key={company.name}>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm font-medium text-gray-900">{company.name}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{company.name}</span>
                       <div className="text-right">
                         <span className="text-sm font-medium">{formatCurrency(company.amount, locale)}</span>
-                        <span className="text-xs text-gray-400 ml-2">({pct.toFixed(1)}%)</span>
+                        <span className="text-xs text-gray-400 dark:text-slate-500 ml-2">({pct.toFixed(1)}%)</span>
                       </div>
                     </div>
-                    <div className="bg-gray-100 rounded-full h-3">
+                    <div className="bg-gray-100 dark:bg-slate-700 rounded-full h-3">
                       <div
                         className="bg-blue-500 h-3 rounded-full transition-all"
                         style={{ width: `${pct}%` }}
@@ -271,7 +271,7 @@ export default function AnalyticsPage() {
               })}
             </div>
           ) : (
-            <p className="text-gray-400 text-center py-8">{t(locale, 'common.noData')}</p>
+            <p className="text-gray-400 dark:text-slate-500 text-center py-8">{t(locale, 'common.noData')}</p>
           )}
         </div>
       </div>
@@ -287,10 +287,10 @@ function MetricCard({ label, value, sublabel, color }: { label: string; value: s
     red: 'border-l-red-500',
   };
   return (
-    <div className={`bg-white rounded-xl border border-gray-200 border-l-4 ${bg[color]} p-5`}>
-      <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">{label}</p>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
-      <p className="text-xs text-gray-400 mt-1">{sublabel}</p>
+    <div className={`bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 border-l-4 ${bg[color]} p-5`}>
+      <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wide mb-1">{label}</p>
+      <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+      <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">{sublabel}</p>
     </div>
   );
 }
@@ -299,8 +299,8 @@ function StatusRow({ color, label, count }: { color: string; label: string; coun
   return (
     <div className="flex items-center gap-2">
       <div className={`w-3 h-3 rounded-full ${color}`} />
-      <span className="text-sm text-gray-600">{label}</span>
-      <span className="text-sm font-medium text-gray-900 ml-auto">{count}</span>
+      <span className="text-sm text-gray-600 dark:text-slate-400">{label}</span>
+      <span className="text-sm font-medium text-gray-900 dark:text-white ml-auto">{count}</span>
     </div>
   );
 }

@@ -205,12 +205,12 @@ export default function InvoiceFormPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <button onClick={() => router.back()} className="text-gray-400 hover:text-gray-600">
+            <button onClick={() => router.back()} className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
               </svg>
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               {isNew ? t(locale, 'invoice.createInvoice') : t(locale, 'invoice.editInvoice')}
             </h1>
           </div>
@@ -224,15 +224,15 @@ export default function InvoiceFormPage() {
 
         <div className="space-y-6">
           {/* Company Selection & Invoice Meta */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Company Select */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'invoice.selectCompany')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'invoice.selectCompany')}</label>
                 <select
                   value={form.companyId}
                   onChange={(e) => handleCompanySelect(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 >
                   <option value="">{locale === 'en' ? '-- Select company --' : '-- Vyberte spoločnosť --'}</option>
                   {companies.map((c) => (
@@ -241,30 +241,30 @@ export default function InvoiceFormPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'invoice.invoiceNumber')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'invoice.invoiceNumber')}</label>
                 <input
                   type="text"
                   value={form.invoiceNumber}
                   onChange={(e) => updateForm({ invoiceNumber: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'invoice.invoiceDate')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'invoice.invoiceDate')}</label>
                 <input
                   type="date"
                   value={form.invoiceDate}
                   onChange={(e) => updateForm({ invoiceDate: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'invoice.dueDate')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'invoice.dueDate')}</label>
                 <input
                   type="date"
                   value={form.dueDate}
                   onChange={(e) => updateForm({ dueDate: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
             </div>
@@ -272,13 +272,13 @@ export default function InvoiceFormPage() {
             {/* Template & Payment */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {locale === 'en' ? 'Template' : 'Šablóna'}
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+                  {locale === 'en' ? 'Template' : 'Sablona'}
                 </label>
                 <select
                   value={form.template}
                   onChange={(e) => updateForm({ template: e.target.value as InvoiceTemplate })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 >
                   <option value="modern">Modern</option>
                   <option value="classic">Classic</option>
@@ -286,11 +286,11 @@ export default function InvoiceFormPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'invoice.paymentMethod')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'invoice.paymentMethod')}</label>
                 <select
                   value={form.paymentMethod}
                   onChange={(e) => updateForm({ paymentMethod: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 >
                   {rc.paymentMethods.map((m) => (
                     <option key={m} value={m}>{m}</option>
@@ -300,36 +300,36 @@ export default function InvoiceFormPage() {
               {/* Region-specific fields */}
               {locale === 'sk' && rc.invoiceFields.variableSymbol && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{rc.invoiceFields.variableSymbol.label}</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{rc.invoiceFields.variableSymbol.label}</label>
                   <input
                     type="text"
                     value={form.variableSymbol}
                     onChange={(e) => updateForm({ variableSymbol: e.target.value })}
                     placeholder={rc.invoiceFields.variableSymbol.placeholder}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                   />
                 </div>
               )}
               {locale === 'sk' && rc.invoiceFields.constantSymbol && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{rc.invoiceFields.constantSymbol.label}</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{rc.invoiceFields.constantSymbol.label}</label>
                   <input
                     type="text"
                     value={form.constantSymbol}
                     onChange={(e) => updateForm({ constantSymbol: e.target.value })}
                     placeholder={rc.invoiceFields.constantSymbol.placeholder}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                   />
                 </div>
               )}
               {locale === 'en' && rc.invoiceFields.poNumber && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{rc.invoiceFields.poNumber.label}</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{rc.invoiceFields.poNumber.label}</label>
                   <input
                     type="text"
                     value={form.poNumber}
                     onChange={(e) => updateForm({ poNumber: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                   />
                 </div>
               )}
@@ -337,104 +337,104 @@ export default function InvoiceFormPage() {
           </div>
 
           {/* Client Details */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t(locale, 'invoice.to')}</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t(locale, 'invoice.to')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                   {t(locale, 'invoice.clientName')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={form.clientName}
                   onChange={(e) => updateForm({ clientName: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'invoice.clientEmail')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'invoice.clientEmail')}</label>
                 <input
                   type="email"
                   value={form.clientEmail}
                   onChange={(e) => updateForm({ clientEmail: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">{locale === 'en' ? 'Street Address' : 'Ulica'}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{locale === 'en' ? 'Street Address' : 'Ulica'}</label>
                 <input
                   type="text"
                   value={form.clientStreet}
                   onChange={(e) => updateForm({ clientStreet: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'company.city')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'company.city')}</label>
                 <input
                   type="text"
                   value={form.clientCity}
                   onChange={(e) => updateForm({ clientCity: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'company.state')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'company.state')}</label>
                 <input
                   type="text"
                   value={form.clientState}
                   onChange={(e) => updateForm({ clientState: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'company.zip')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'company.zip')}</label>
                 <input
                   type="text"
                   value={form.clientZip}
                   onChange={(e) => updateForm({ clientZip: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'company.country')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'company.country')}</label>
                 <input
                   type="text"
                   value={form.clientCountry}
                   onChange={(e) => updateForm({ clientCountry: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               {/* Region-specific client fields */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {locale === 'en' ? 'Client Tax ID' : 'DIČ klienta'}
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+                  {locale === 'en' ? 'Client Tax ID' : 'DIC klienta'}
                 </label>
                 <input
                   type="text"
                   value={form.clientTaxId}
                   onChange={(e) => updateForm({ clientTaxId: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               {locale === 'sk' && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">IČO klienta</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">ICO klienta</label>
                     <input
                       type="text"
                       value={form.clientRegistrationNumber}
                       onChange={(e) => updateForm({ clientRegistrationNumber: e.target.value })}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">IČ DPH klienta</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">IC DPH klienta</label>
                     <input
                       type="text"
                       value={form.clientVatId}
                       onChange={(e) => updateForm({ clientVatId: e.target.value })}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                     />
                   </div>
                 </>
@@ -443,11 +443,11 @@ export default function InvoiceFormPage() {
           </div>
 
           {/* Line Items */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t(locale, 'invoice.items')}</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t(locale, 'invoice.items')}</h2>
 
             {/* Items Header */}
-            <div className="grid grid-cols-[1fr_80px_70px_100px_100px_40px] gap-2 mb-2 text-xs font-semibold text-gray-500 uppercase">
+            <div className="grid grid-cols-[1fr_80px_70px_100px_100px_40px] gap-2 mb-2 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase">
               <span>{t(locale, 'invoice.itemDescription')}</span>
               <span className="text-center">{t(locale, 'invoice.itemUnit')}</span>
               <span className="text-right">{t(locale, 'invoice.itemQuantity')}</span>
@@ -464,12 +464,12 @@ export default function InvoiceFormPage() {
                   value={item.description}
                   onChange={(e) => updateItem(idx, 'description', e.target.value)}
                   placeholder={locale === 'en' ? 'Description...' : 'Popis...'}
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
                 <select
                   value={item.unit}
                   onChange={(e) => updateItem(idx, 'unit', e.target.value)}
-                  className="border border-gray-300 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="border border-gray-300 dark:border-slate-600 rounded-lg px-2 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 >
                   {unitOptions.map(([key, label]) => (
                     <option key={key} value={key}>{label}</option>
@@ -481,7 +481,7 @@ export default function InvoiceFormPage() {
                   step="0.01"
                   value={item.quantity}
                   onChange={(e) => updateItem(idx, 'quantity', parseFloat(e.target.value) || 0)}
-                  className="border border-gray-300 rounded-lg px-2 py-2 text-sm text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="border border-gray-300 dark:border-slate-600 rounded-lg px-2 py-2 text-sm text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
                 <input
                   type="number"
@@ -489,7 +489,7 @@ export default function InvoiceFormPage() {
                   step="0.01"
                   value={item.rate}
                   onChange={(e) => updateItem(idx, 'rate', parseFloat(e.target.value) || 0)}
-                  className="border border-gray-300 rounded-lg px-2 py-2 text-sm text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="border border-gray-300 dark:border-slate-600 rounded-lg px-2 py-2 text-sm text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
                 <div className="text-sm font-medium text-right py-2 pr-2">
                   {formatCurrency(item.amount, locale)}
@@ -497,7 +497,7 @@ export default function InvoiceFormPage() {
                 <button
                   onClick={() => removeItem(idx)}
                   disabled={form.items.length <= 1}
-                  className="p-1.5 text-gray-400 hover:text-red-500 disabled:opacity-30 rounded"
+                  className="p-1.5 text-gray-400 dark:text-slate-500 hover:text-red-500 disabled:opacity-30 rounded"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -508,7 +508,7 @@ export default function InvoiceFormPage() {
 
             <button
               onClick={addItem}
-              className="mt-2 inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="mt-2 inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-400 font-medium"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -517,20 +517,20 @@ export default function InvoiceFormPage() {
             </button>
 
             {/* Totals */}
-            <div className="mt-6 border-t border-gray-200 pt-4">
+            <div className="mt-6 border-t border-gray-200 dark:border-slate-700 pt-4">
               <div className="flex justify-end">
                 <div className="w-72 space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">{t(locale, 'invoice.subtotal')}</span>
+                    <span className="text-gray-500 dark:text-slate-400">{t(locale, 'invoice.subtotal')}</span>
                     <span className="font-medium">{formatCurrency(form.subtotal, locale)}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-500">{t(locale, 'invoice.discount')}</span>
+                      <span className="text-gray-500 dark:text-slate-400">{t(locale, 'invoice.discount')}</span>
                       <select
                         value={form.discountType}
                         onChange={(e) => updateForm({ discountType: e.target.value as 'percentage' | 'fixed' })}
-                        className="border border-gray-300 rounded px-1.5 py-0.5 text-xs"
+                        className="border border-gray-300 dark:border-slate-600 rounded px-1.5 py-0.5 text-xs dark:bg-slate-700 dark:text-white"
                       >
                         <option value="fixed">{rc.currencySymbol}</option>
                         <option value="percentage">%</option>
@@ -542,29 +542,29 @@ export default function InvoiceFormPage() {
                       step="0.01"
                       value={form.discount}
                       onChange={(e) => updateForm({ discount: parseFloat(e.target.value) || 0 })}
-                      className="w-24 border border-gray-300 rounded-lg px-2 py-1 text-sm text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-24 border border-gray-300 dark:border-slate-600 rounded-lg px-2 py-1 text-sm text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                     />
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500">{rc.taxName} (%)</span>
+                    <span className="text-gray-500 dark:text-slate-400">{rc.taxName} (%)</span>
                     <input
                       type="number"
                       min="0"
                       step="0.1"
                       value={form.taxRate}
                       onChange={(e) => updateForm({ taxRate: parseFloat(e.target.value) || 0 })}
-                      className="w-24 border border-gray-300 rounded-lg px-2 py-1 text-sm text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-24 border border-gray-300 dark:border-slate-600 rounded-lg px-2 py-1 text-sm text-right focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                     />
                   </div>
                   {form.taxRate > 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">{rc.taxName}</span>
+                      <span className="text-gray-500 dark:text-slate-400">{rc.taxName}</span>
                       <span>{formatCurrency(form.taxAmount, locale)}</span>
                     </div>
                   )}
-                  <div className="flex justify-between text-lg font-bold border-t border-gray-200 pt-2">
+                  <div className="flex justify-between text-lg font-bold border-t border-gray-200 dark:border-slate-700 pt-2">
                     <span>{t(locale, 'invoice.total')}</span>
-                    <span className="text-blue-600">{formatCurrency(form.total, locale)}</span>
+                    <span className="text-blue-600 dark:text-blue-400">{formatCurrency(form.total, locale)}</span>
                   </div>
                 </div>
               </div>
@@ -572,25 +572,25 @@ export default function InvoiceFormPage() {
           </div>
 
           {/* Notes & Terms */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'invoice.notes')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'invoice.notes')}</label>
                 <textarea
                   value={form.notes}
                   onChange={(e) => updateForm({ notes: e.target.value })}
                   rows={4}
-                  placeholder={locale === 'en' ? 'Additional notes for the client...' : 'Dodatočné poznámky pre klienta...'}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder={locale === 'en' ? 'Additional notes for the client...' : 'Dodatocne poznamky pre klienta...'}
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'invoice.terms')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'invoice.terms')}</label>
                 <textarea
                   value={form.terms}
                   onChange={(e) => updateForm({ terms: e.target.value })}
                   rows={4}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
             </div>
@@ -600,7 +600,7 @@ export default function InvoiceFormPage() {
           <div className="flex justify-end gap-3 pb-8">
             <button
               onClick={() => router.back()}
-              className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
             >
               {t(locale, 'common.cancel')}
             </button>

@@ -82,16 +82,16 @@ export default function CompanyFormPage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <button onClick={() => router.push('/companies')} className="text-gray-400 hover:text-gray-600">
+          <button onClick={() => router.push('/companies')} className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               {isNew ? t(locale, 'company.addCompany') : t(locale, 'company.editCompany')}
             </h1>
-            <p className="text-gray-500 text-sm mt-0.5">
+            <p className="text-gray-500 dark:text-slate-400 text-sm mt-0.5">
               {locale === 'en' ? 'Fill in your business details below' : 'Vyplňte údaje o vašej spoločnosti'}
             </p>
           </div>
@@ -204,21 +204,21 @@ export default function CompanyFormPage() {
             </div>
             <div className="grid grid-cols-1 gap-4 mt-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t(locale, 'company.notes')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t(locale, 'company.notes')}</label>
                 <textarea
                   value={form.defaultNotes}
                   onChange={(e) => updateField('defaultNotes', e.target.value)}
                   rows={2}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{locale === 'en' ? 'Default Terms & Conditions' : 'Predvolené obchodné podmienky'}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{locale === 'en' ? 'Default Terms & Conditions' : 'Predvolené obchodné podmienky'}</label>
                 <textarea
                   value={form.defaultTerms}
                   onChange={(e) => updateField('defaultTerms', e.target.value)}
                   rows={3}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
                 />
               </div>
             </div>
@@ -249,10 +249,10 @@ export default function CompanyFormPage() {
           </Section>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-slate-700">
             <button
               onClick={() => router.push('/companies')}
-              className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
             >
               {t(locale, 'common.cancel')}
             </button>
@@ -271,8 +271,8 @@ export default function CompanyFormPage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">{title}</h2>
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{title}</h2>
       {children}
     </div>
   );
@@ -295,16 +295,16 @@ function Input({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
       </label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
       />
     </div>
   );

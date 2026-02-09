@@ -29,8 +29,8 @@ export default function Dashboard() {
   return (
     <Layout>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">{t(locale, 'dashboard.title')}</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t(locale, 'dashboard.title')}</h1>
+        <p className="text-gray-500 dark:text-slate-400 mt-1">
           {locale === 'en' ? 'Overview of your invoicing activity' : 'Prehľad vašej fakturačnej činnosti'}
         </p>
       </div>
@@ -84,14 +84,14 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Monthly Revenue Chart */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">{t(locale, 'dashboard.revenueOverTime')}</h3>
+        <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t(locale, 'dashboard.revenueOverTime')}</h3>
           {monthlyData.length > 0 ? (
             <div className="space-y-3">
               {monthlyData.map((m) => (
                 <div key={m.label} className="flex items-center gap-3">
-                  <span className="w-16 text-xs text-gray-500 text-right">{m.label}</span>
-                  <div className="flex-1 bg-gray-100 rounded-full h-6 relative">
+                  <span className="w-16 text-xs text-gray-500 dark:text-slate-400 text-right">{m.label}</span>
+                  <div className="flex-1 bg-gray-100 dark:bg-slate-700 rounded-full h-6 relative">
                     <div
                       className="bg-blue-500 h-6 rounded-full transition-all"
                       style={{ width: `${m.percentage}%` }}
@@ -102,15 +102,15 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-gray-400 text-center py-8">{t(locale, 'common.noData')}</p>
+            <p className="text-gray-400 dark:text-slate-500 text-center py-8">{t(locale, 'common.noData')}</p>
           )}
         </div>
 
         {/* Recent Invoices */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-semibold text-gray-900">{t(locale, 'dashboard.recentInvoices')}</h3>
-            <Link href="/invoices" className="text-blue-600 text-sm hover:underline">
+            <h3 className="font-semibold text-gray-900 dark:text-white">{t(locale, 'dashboard.recentInvoices')}</h3>
+            <Link href="/invoices" className="text-blue-600 dark:text-blue-400 text-sm hover:underline">
               {locale === 'en' ? 'View all' : 'Zobraziť všetky'}
             </Link>
           </div>
@@ -120,12 +120,12 @@ export default function Dashboard() {
                 <Link
                   key={inv.id}
                   href={`/invoices/${inv.id}`}
-                  className="block p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="font-medium text-sm text-gray-900">{inv.invoiceNumber}</p>
-                      <p className="text-xs text-gray-500">{inv.clientName}</p>
+                      <p className="font-medium text-sm text-gray-900 dark:text-white">{inv.invoiceNumber}</p>
+                      <p className="text-xs text-gray-500 dark:text-slate-400">{inv.clientName}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-medium text-sm">{formatCurrency(inv.total, locale)}</p>
@@ -137,10 +137,10 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-gray-400 mb-3">{t(locale, 'common.noData')}</p>
+              <p className="text-gray-400 dark:text-slate-500 mb-3">{t(locale, 'common.noData')}</p>
               <Link
                 href="/invoices/new"
-                className="text-blue-600 text-sm hover:underline"
+                className="text-blue-600 dark:text-blue-400 text-sm hover:underline"
               >
                 {t(locale, 'invoice.createInvoice')}
               </Link>
@@ -151,11 +151,11 @@ export default function Dashboard() {
 
       {/* Quick Actions */}
       {companies.length === 0 && (
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
-          <h3 className="font-semibold text-blue-900 mb-2">
+        <div className="mt-8 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl p-6 text-center">
+          <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
             {locale === 'en' ? 'Get Started' : 'Začnite'}
           </h3>
-          <p className="text-blue-700 text-sm mb-4">
+          <p className="text-blue-700 dark:text-blue-400 text-sm mb-4">
             {locale === 'en'
               ? 'Add your first company to start creating invoices.'
               : 'Pridajte svoju prvú spoločnosť a začnite vytvárať faktúry.'}
@@ -186,31 +186,31 @@ function StatCard({
   icon: React.ReactNode;
 }) {
   const colors = {
-    blue: 'bg-blue-50 text-blue-600',
-    green: 'bg-green-50 text-green-600',
-    yellow: 'bg-yellow-50 text-yellow-600',
-    red: 'bg-red-50 text-red-600',
+    blue: 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
+    green: 'bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400',
+    yellow: 'bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400',
+    red: 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400',
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
       <div className="flex items-center gap-3 mb-3">
         <div className={`p-2 rounded-lg ${colors[color]}`}>{icon}</div>
-        <span className="text-sm text-gray-500">{title}</span>
+        <span className="text-sm text-gray-500 dark:text-slate-400">{title}</span>
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
-      {subtitle && <p className="text-xs text-gray-400 mt-1">{subtitle}</p>}
+      <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+      {subtitle && <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">{subtitle}</p>}
     </div>
   );
 }
 
 export function StatusBadge({ status, locale }: { status: string; locale: 'en' | 'sk' }) {
   const styles: Record<string, string> = {
-    draft: 'bg-gray-100 text-gray-600',
-    sent: 'bg-blue-100 text-blue-700',
-    paid: 'bg-green-100 text-green-700',
-    overdue: 'bg-red-100 text-red-700',
-    cancelled: 'bg-gray-100 text-gray-500',
+    draft: 'bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-400',
+    sent: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400',
+    paid: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400',
+    overdue: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400',
+    cancelled: 'bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-slate-400',
   };
 
   return (

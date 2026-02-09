@@ -42,8 +42,8 @@ export default function InvoicesPage() {
     <Layout>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t(locale, 'invoice.title')}</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t(locale, 'invoice.title')}</h1>
+          <p className="text-gray-500 dark:text-slate-400 mt-1">
             {locale === 'en' ? `${invoices.length} total invoices` : `${invoices.length} faktúr celkom`}
           </p>
         </div>
@@ -60,13 +60,13 @@ export default function InvoicesPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-4 mb-6">
-        <div className="flex rounded-lg bg-gray-100 p-1">
+        <div className="flex rounded-lg bg-gray-100 dark:bg-slate-700 p-1">
           {statusFilters.map((sf) => (
             <button
               key={sf.key}
               onClick={() => setFilter(sf.key)}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                filter === sf.key ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                filter === sf.key ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'
               }`}
             >
               {sf.label}
@@ -79,44 +79,44 @@ export default function InvoicesPage() {
             placeholder={t(locale, 'common.search')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:text-white"
           />
         </div>
       </div>
 
       {/* Invoices Table */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <p className="text-gray-400 mb-3">{t(locale, 'common.noData')}</p>
-          <Link href="/invoices/new" className="text-blue-600 text-sm hover:underline">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-12 text-center">
+          <p className="text-gray-400 dark:text-slate-500 mb-3">{t(locale, 'common.noData')}</p>
+          <Link href="/invoices/new" className="text-blue-600 dark:text-blue-400 text-sm hover:underline">
             {t(locale, 'invoice.createInvoice')}
           </Link>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t(locale, 'invoice.invoiceNumber')}</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t(locale, 'invoice.clientName')}</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t(locale, 'invoice.invoiceDate')}</th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t(locale, 'invoice.dueDate')}</th>
-                <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t(locale, 'invoice.total')}</th>
-                <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t(locale, 'common.status')}</th>
-                <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t(locale, 'common.actions')}</th>
+              <tr className="border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-700/50">
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase">{t(locale, 'invoice.invoiceNumber')}</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase">{t(locale, 'invoice.clientName')}</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase">{t(locale, 'invoice.invoiceDate')}</th>
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase">{t(locale, 'invoice.dueDate')}</th>
+                <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase">{t(locale, 'invoice.total')}</th>
+                <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase">{t(locale, 'common.status')}</th>
+                <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase">{t(locale, 'common.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((inv) => (
-                <tr key={inv.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                <tr key={inv.id} className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">
                   <td className="py-3 px-4">
-                    <Link href={`/invoices/${inv.id}`} className="text-blue-600 font-medium text-sm hover:underline">
+                    <Link href={`/invoices/${inv.id}`} className="text-blue-600 dark:text-blue-400 font-medium text-sm hover:underline">
                       {inv.invoiceNumber}
                     </Link>
                   </td>
-                  <td className="py-3 px-4 text-sm text-gray-700">{inv.clientName}</td>
-                  <td className="py-3 px-4 text-sm text-gray-500">{formatDate(inv.invoiceDate, locale)}</td>
-                  <td className="py-3 px-4 text-sm text-gray-500">{formatDate(inv.dueDate, locale)}</td>
+                  <td className="py-3 px-4 text-sm text-gray-700 dark:text-slate-300">{inv.clientName}</td>
+                  <td className="py-3 px-4 text-sm text-gray-500 dark:text-slate-400">{formatDate(inv.invoiceDate, locale)}</td>
+                  <td className="py-3 px-4 text-sm text-gray-500 dark:text-slate-400">{formatDate(inv.dueDate, locale)}</td>
                   <td className="py-3 px-4 text-sm font-medium text-right">{formatCurrency(inv.total, locale)}</td>
                   <td className="py-3 px-4 text-center">
                     <StatusBadge status={inv.status} locale={locale} />
@@ -125,7 +125,7 @@ export default function InvoicesPage() {
                     <div className="flex justify-end gap-1">
                       <Link
                         href={`/invoices/${inv.id}`}
-                        className="p-1.5 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                        className="p-1.5 text-gray-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                         title={t(locale, 'common.preview')}
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -135,7 +135,7 @@ export default function InvoicesPage() {
                       </Link>
                       <Link
                         href={`/invoices/${inv.id}/edit`}
-                        className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                        className="p-1.5 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                         title={t(locale, 'common.edit')}
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -144,7 +144,7 @@ export default function InvoicesPage() {
                       </Link>
                       <button
                         onClick={() => handleClone(inv.id)}
-                        className="p-1.5 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+                        className="p-1.5 text-gray-400 dark:text-slate-500 hover:text-green-600 dark:hover:text-green-400 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
                         title={t(locale, 'common.clone')}
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -154,7 +154,7 @@ export default function InvoicesPage() {
                       {inv.status === 'draft' && (
                         <button
                           onClick={() => updateInvoiceStatus(inv.id, 'sent')}
-                          className="p-1.5 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                          className="p-1.5 text-gray-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                           title={t(locale, 'invoice.markAsSent')}
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -165,7 +165,7 @@ export default function InvoicesPage() {
                       {(inv.status === 'sent' || inv.status === 'overdue') && (
                         <button
                           onClick={() => updateInvoiceStatus(inv.id, 'paid')}
-                          className="p-1.5 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+                          className="p-1.5 text-gray-400 dark:text-slate-500 hover:text-green-600 dark:hover:text-green-400 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
                           title={t(locale, 'invoice.markAsPaid')}
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -177,7 +177,7 @@ export default function InvoicesPage() {
                         onClick={() => {
                           if (confirm(t(locale, 'common.confirm'))) deleteInvoice(inv.id);
                         }}
-                        className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                        className="p-1.5 text-gray-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                         title={t(locale, 'common.delete')}
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
