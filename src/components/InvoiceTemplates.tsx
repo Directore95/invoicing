@@ -117,25 +117,25 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
           </p>
           <p className="text-gray-600">{invoice.companyCountry}</p>
           {invoice.companyTaxId && (
-            <p className="text-gray-600 mt-2">
-              <span className="text-gray-400">{locale === 'en' ? 'Tax ID: ' : 'DIČ: '}</span>
+            <p className="text-gray-800 mt-2">
+              <span className="text-gray-500">{locale === 'en' ? 'Tax ID: ' : 'DIČ: '}</span>
               {invoice.companyTaxId}
             </p>
           )}
           {invoice.companyRegistrationNumber && (
-            <p className="text-gray-600">
-              <span className="text-gray-400">{locale === 'en' ? 'Reg #: ' : 'IČO: '}</span>
+            <p className="text-gray-800">
+              <span className="text-gray-500">{locale === 'en' ? 'Reg #: ' : 'IČO: '}</span>
               {invoice.companyRegistrationNumber}
             </p>
           )}
           {invoice.companyVatId && locale === 'sk' && (
-            <p className="text-gray-600">
-              <span className="text-gray-400">IČ DPH: </span>
+            <p className="text-gray-800">
+              <span className="text-gray-500">IČ DPH: </span>
               {invoice.companyVatId}
             </p>
           )}
-          {invoice.companyPhone && <p className="text-gray-600 mt-1">{invoice.companyPhone}</p>}
-          {invoice.companyEmail && <p className="text-gray-600">{invoice.companyEmail}</p>}
+          {invoice.companyPhone && <p className="text-gray-800 mt-1">{invoice.companyPhone}</p>}
+          {invoice.companyEmail && <p className="text-gray-800">{invoice.companyEmail}</p>}
         </div>
         <div>
           <p className="text-xs uppercase tracking-wide text-gray-400 mb-2 font-semibold">
@@ -148,24 +148,24 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
           </p>
           <p className="text-gray-600">{invoice.clientCountry}</p>
           {invoice.clientTaxId && (
-            <p className="text-gray-600 mt-2">
-              <span className="text-gray-400">{locale === 'en' ? 'Tax ID: ' : 'DIČ: '}</span>
+            <p className="text-gray-800 mt-2">
+              <span className="text-gray-500">{locale === 'en' ? 'Tax ID: ' : 'DIČ: '}</span>
               {invoice.clientTaxId}
             </p>
           )}
           {invoice.clientRegistrationNumber && locale === 'sk' && (
-            <p className="text-gray-600">
-              <span className="text-gray-400">IČO: </span>
+            <p className="text-gray-800">
+              <span className="text-gray-500">IČO: </span>
               {invoice.clientRegistrationNumber}
             </p>
           )}
           {invoice.clientVatId && locale === 'sk' && (
-            <p className="text-gray-600">
-              <span className="text-gray-400">IČ DPH: </span>
+            <p className="text-gray-800">
+              <span className="text-gray-500">IČ DPH: </span>
               {invoice.clientVatId}
             </p>
           )}
-          {invoice.clientEmail && <p className="text-gray-600 mt-1">{invoice.clientEmail}</p>}
+          {invoice.clientEmail && <p className="text-gray-800 mt-1">{invoice.clientEmail}</p>}
         </div>
       </div>
 
@@ -228,22 +228,22 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
             </p>
             <div className="grid grid-cols-2 gap-2 text-sm">
               {invoice.companyBankName && (
-                <p className="text-gray-600"><span className="text-gray-400">{t(locale, 'company.bankName')}: </span>{invoice.companyBankName}</p>
+                <p className="text-gray-800"><span className="text-gray-500">{t(locale, 'company.bankName')}: </span>{invoice.companyBankName}</p>
               )}
               {locale === 'sk' && invoice.companyIban && (
-                <p className="text-gray-600"><span className="text-gray-400">IBAN: </span>{invoice.companyIban}</p>
+                <p className="text-gray-800"><span className="text-gray-500">IBAN: </span>{invoice.companyIban}</p>
               )}
               {locale === 'en' && invoice.companyBankAccount && (
-                <p className="text-gray-600"><span className="text-gray-400">Account: </span>{invoice.companyBankAccount}</p>
+                <p className="text-gray-800"><span className="text-gray-500">Account: </span>{invoice.companyBankAccount}</p>
               )}
               {locale === 'en' && invoice.companyRoutingNumber && (
-                <p className="text-gray-600"><span className="text-gray-400">Routing: </span>{invoice.companyRoutingNumber}</p>
+                <p className="text-gray-800"><span className="text-gray-500">Routing: </span>{invoice.companyRoutingNumber}</p>
               )}
               {invoice.companySwiftCode && (
-                <p className="text-gray-600"><span className="text-gray-400">SWIFT/BIC: </span>{invoice.companySwiftCode}</p>
+                <p className="text-gray-800"><span className="text-gray-500">SWIFT/BIC: </span>{invoice.companySwiftCode}</p>
               )}
               {invoice.variableSymbol && locale === 'sk' && (
-                <p className="text-gray-600"><span className="text-gray-400">VS: </span>{invoice.variableSymbol}</p>
+                <p className="text-gray-800"><span className="text-gray-500">VS: </span>{invoice.variableSymbol}</p>
               )}
             </div>
           </div>
@@ -260,8 +260,8 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
 
       {/* Payment method */}
       {invoice.paymentMethod && (
-        <p className="text-gray-600 mb-4 text-sm">
-          <span className="text-gray-400">{t(locale, 'invoice.paymentMethod')}: </span>{invoice.paymentMethod}
+        <p className="text-gray-800 mb-4 text-sm">
+          <span className="text-gray-500">{t(locale, 'invoice.paymentMethod')}: </span>{invoice.paymentMethod}
         </p>
       )}
 
@@ -345,32 +345,32 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
           <div className="space-y-1">
             <div className="flex justify-between">
               <span className="text-gray-500">{t(locale, 'invoice.invoiceNumber')}:</span>
-              <span className="font-medium">{invoice.invoiceNumber}</span>
+              <span className="font-medium text-gray-900">{invoice.invoiceNumber}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">{t(locale, 'invoice.invoiceDate')}:</span>
-              <span>{formatDate(invoice.invoiceDate, locale)}</span>
+              <span className="text-gray-900">{formatDate(invoice.invoiceDate, locale)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">{t(locale, 'invoice.dueDate')}:</span>
-              <span>{formatDate(invoice.dueDate, locale)}</span>
+              <span className="text-gray-900">{formatDate(invoice.dueDate, locale)}</span>
             </div>
             {invoice.poNumber && locale === 'en' && (
               <div className="flex justify-between">
                 <span className="text-gray-500">PO #:</span>
-                <span>{invoice.poNumber}</span>
+                <span className="text-gray-900">{invoice.poNumber}</span>
               </div>
             )}
             {invoice.variableSymbol && locale === 'sk' && (
               <div className="flex justify-between">
                 <span className="text-gray-500">VS:</span>
-                <span>{invoice.variableSymbol}</span>
+                <span className="text-gray-900">{invoice.variableSymbol}</span>
               </div>
             )}
             {invoice.constantSymbol && locale === 'sk' && (
               <div className="flex justify-between">
                 <span className="text-gray-500">KS:</span>
-                <span>{invoice.constantSymbol}</span>
+                <span className="text-gray-900">{invoice.constantSymbol}</span>
               </div>
             )}
           </div>
@@ -393,11 +393,11 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
           {invoice.items.map((item, idx) => (
             <tr key={item.id} className="border-b border-gray-200">
               <td className="py-2 px-3 text-gray-500">{idx + 1}</td>
-              <td className="py-2 px-3">{item.description}</td>
-              <td className="py-2 px-3 text-center text-gray-600">{item.unit}</td>
-              <td className="py-2 px-3 text-right">{item.quantity}</td>
-              <td className="py-2 px-3 text-right">{formatCurrency(item.rate, locale)}</td>
-              <td className="py-2 px-3 text-right font-medium">{formatCurrency(item.amount, locale)}</td>
+              <td className="py-2 px-3 text-gray-900">{item.description}</td>
+              <td className="py-2 px-3 text-center text-gray-700">{item.unit}</td>
+              <td className="py-2 px-3 text-right text-gray-900">{item.quantity}</td>
+              <td className="py-2 px-3 text-right text-gray-900">{formatCurrency(item.rate, locale)}</td>
+              <td className="py-2 px-3 text-right font-medium text-gray-900">{formatCurrency(item.amount, locale)}</td>
             </tr>
           ))}
         </tbody>
@@ -410,12 +410,12 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
           <div className="flex justify-between items-start">
             <div>
               <h4 className="font-bold text-gray-800 text-xs uppercase mb-2">{t(locale, 'company.bankDetails')}</h4>
-              {invoice.companyBankName && <p className="text-gray-600 text-xs">{t(locale, 'company.bankName')}: {invoice.companyBankName}</p>}
-              {locale === 'sk' && invoice.companyIban && <p className="text-gray-600 text-xs">IBAN: {invoice.companyIban}</p>}
-              {locale === 'en' && invoice.companyBankAccount && <p className="text-gray-600 text-xs">Account: {invoice.companyBankAccount}</p>}
-              {locale === 'en' && invoice.companyRoutingNumber && <p className="text-gray-600 text-xs">Routing: {invoice.companyRoutingNumber}</p>}
-              {invoice.companySwiftCode && <p className="text-gray-600 text-xs">SWIFT: {invoice.companySwiftCode}</p>}
-              {invoice.paymentMethod && <p className="text-gray-600 text-xs mt-1">{t(locale, 'invoice.paymentMethod')}: {invoice.paymentMethod}</p>}
+              {invoice.companyBankName && <p className="text-gray-800 text-xs">{t(locale, 'company.bankName')}: {invoice.companyBankName}</p>}
+              {locale === 'sk' && invoice.companyIban && <p className="text-gray-800 text-xs">IBAN: {invoice.companyIban}</p>}
+              {locale === 'en' && invoice.companyBankAccount && <p className="text-gray-800 text-xs">Account: {invoice.companyBankAccount}</p>}
+              {locale === 'en' && invoice.companyRoutingNumber && <p className="text-gray-800 text-xs">Routing: {invoice.companyRoutingNumber}</p>}
+              {invoice.companySwiftCode && <p className="text-gray-800 text-xs">SWIFT: {invoice.companySwiftCode}</p>}
+              {invoice.paymentMethod && <p className="text-gray-800 text-xs mt-1">{t(locale, 'invoice.paymentMethod')}: {invoice.paymentMethod}</p>}
             </div>
             {qrDataUrl && (
               <div className="text-center ml-3 flex-shrink-0">
@@ -492,17 +492,17 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
           ) : (
             <h2 className="text-lg font-semibold text-gray-900 mb-4">{invoice.companyName}</h2>
           )}
-          <p className="text-gray-400 text-xs">{invoice.companyStreet}</p>
-          <p className="text-gray-400 text-xs">{invoice.companyCity}{invoice.companyState ? `, ${invoice.companyState}` : ''} {invoice.companyZip}</p>
-          {invoice.companyEmail && <p className="text-gray-400 text-xs mt-1">{invoice.companyEmail}</p>}
+          <p className="text-gray-600 text-xs">{invoice.companyStreet}</p>
+          <p className="text-gray-600 text-xs">{invoice.companyCity}{invoice.companyState ? `, ${invoice.companyState}` : ''} {invoice.companyZip}</p>
+          {invoice.companyEmail && <p className="text-gray-600 text-xs mt-1">{invoice.companyEmail}</p>}
         </div>
         <div className="text-right">
           <h1 className="text-2xl font-light text-gray-300 tracking-widest uppercase mb-4">
             {locale === 'en' ? 'Invoice' : 'Faktúra'}
           </h1>
           <p className="text-gray-900 font-medium">{invoice.invoiceNumber}</p>
-          <p className="text-gray-400 text-xs mt-2">{formatDate(invoice.invoiceDate, locale)}</p>
-          <p className="text-gray-400 text-xs">
+          <p className="text-gray-700 text-xs mt-2">{formatDate(invoice.invoiceDate, locale)}</p>
+          <p className="text-gray-700 text-xs">
             {t(locale, 'invoice.dueDate')}: {formatDate(invoice.dueDate, locale)}
           </p>
         </div>
@@ -512,10 +512,10 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
       <div className="mb-10">
         <p className="text-gray-300 text-xs uppercase tracking-widest mb-3">{t(locale, 'invoice.to')}</p>
         <p className="text-gray-900 font-medium">{invoice.clientName}</p>
-        <p className="text-gray-500">{invoice.clientStreet}</p>
-        <p className="text-gray-500">{invoice.clientCity}{invoice.clientState ? `, ${invoice.clientState}` : ''} {invoice.clientZip}</p>
-        {invoice.clientTaxId && <p className="text-gray-400 text-xs mt-1">{locale === 'en' ? 'Tax ID' : 'DIČ'}: {invoice.clientTaxId}</p>}
-        {invoice.clientRegistrationNumber && locale === 'sk' && <p className="text-gray-400 text-xs">IČO: {invoice.clientRegistrationNumber}</p>}
+        <p className="text-gray-700">{invoice.clientStreet}</p>
+        <p className="text-gray-700">{invoice.clientCity}{invoice.clientState ? `, ${invoice.clientState}` : ''} {invoice.clientZip}</p>
+        {invoice.clientTaxId && <p className="text-gray-600 text-xs mt-1">{locale === 'en' ? 'Tax ID' : 'DIČ'}: {invoice.clientTaxId}</p>}
+        {invoice.clientRegistrationNumber && locale === 'sk' && <p className="text-gray-600 text-xs">IČO: {invoice.clientRegistrationNumber}</p>}
       </div>
 
       {/* Items */}
@@ -529,11 +529,11 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
         </div>
         {invoice.items.map((item) => (
           <div key={item.id} className="flex py-3 border-b border-gray-50">
-            <div className="flex-1 text-gray-700">{item.description}</div>
-            <div className="w-16 text-center text-gray-400">{item.unit}</div>
-            <div className="w-20 text-right text-gray-500">{item.quantity}</div>
-            <div className="w-24 text-right text-gray-500">{formatCurrency(item.rate, locale)}</div>
-            <div className="w-28 text-right text-gray-800">{formatCurrency(item.amount, locale)}</div>
+            <div className="flex-1 text-gray-900">{item.description}</div>
+            <div className="w-16 text-center text-gray-600">{item.unit}</div>
+            <div className="w-20 text-right text-gray-800">{item.quantity}</div>
+            <div className="w-24 text-right text-gray-800">{formatCurrency(item.rate, locale)}</div>
+            <div className="w-28 text-right text-gray-900">{formatCurrency(item.amount, locale)}</div>
           </div>
         ))}
       </div>
@@ -541,18 +541,18 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
       {/* Totals */}
       <div className="flex justify-end mb-10">
         <div className="w-64">
-          <div className="flex justify-between py-2 text-gray-400">
+          <div className="flex justify-between py-2 text-gray-700">
             <span>{t(locale, 'invoice.subtotal')}</span>
             <span>{formatCurrency(invoice.subtotal, locale)}</span>
           </div>
           {invoice.discount > 0 && (
-            <div className="flex justify-between py-2 text-gray-400">
+            <div className="flex justify-between py-2 text-gray-700">
               <span>{t(locale, 'invoice.discount')}</span>
               <span>-{invoice.discountType === 'percentage' ? `${invoice.discount}%` : formatCurrency(invoice.discount, locale)}</span>
             </div>
           )}
           {invoice.taxRate > 0 && (
-            <div className="flex justify-between py-2 text-gray-400">
+            <div className="flex justify-between py-2 text-gray-700">
               <span>{rc.taxName} ({invoice.taxRate}%)</span>
               <span>{formatCurrency(invoice.taxAmount, locale)}</span>
             </div>
@@ -567,7 +567,7 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
       {/* Bank & Payment + QR */}
       <div className="border-t border-gray-100 pt-6 mb-6">
         <div className="flex justify-between items-start">
-          <div className="text-xs text-gray-400">
+          <div className="text-xs text-gray-700">
             <div className="flex gap-8">
               <div>
                 {invoice.companyBankName && <p>{t(locale, 'company.bankName')}: {invoice.companyBankName}</p>}
@@ -596,8 +596,8 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
       </div>
 
       {/* Notes */}
-      {invoice.notes && <p className="text-gray-400 text-xs mb-2 whitespace-pre-wrap">{invoice.notes}</p>}
-      {invoice.terms && <p className="text-gray-300 text-xs whitespace-pre-wrap">{invoice.terms}</p>}
+      {invoice.notes && <p className="text-gray-700 text-xs mb-2 whitespace-pre-wrap">{invoice.notes}</p>}
+      {invoice.terms && <p className="text-gray-500 text-xs whitespace-pre-wrap">{invoice.terms}</p>}
 
       {/* Signature & Stamp overlay */}
       <div className="flex justify-end items-end mt-12">
