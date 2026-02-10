@@ -45,7 +45,7 @@ function SignatureStampBlock({ invoice, locale, align = 'right' }: TemplateProps
         )}
       </div>
       <div className="border-t border-gray-300 mt-1 pt-1">
-        <p className="text-xs text-gray-400">{locale === 'en' ? 'Authorized Signature' : 'Podpis a pečiatka'}</p>
+        <p className="text-xs text-gray-600">{locale === 'en' ? 'Authorized Signature' : 'Podpis a pečiatka'}</p>
       </div>
     </div>
   );
@@ -107,7 +107,7 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
       {/* Parties */}
       <div className="grid grid-cols-2 gap-6 mb-6">
         <div>
-          <p className="text-xs uppercase tracking-wide text-gray-400 mb-2 font-semibold">
+          <p className="text-xs uppercase tracking-wide text-gray-600 mb-2 font-semibold">
             {t(locale, 'invoice.from')}
           </p>
           <p className="font-bold text-gray-900">{invoice.companyLegalName || invoice.companyName}</p>
@@ -138,7 +138,7 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
           {invoice.companyEmail && <p className="text-gray-800">{invoice.companyEmail}</p>}
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide text-gray-400 mb-2 font-semibold">
+          <p className="text-xs uppercase tracking-wide text-gray-600 mb-2 font-semibold">
             {t(locale, 'invoice.to')}
           </p>
           <p className="font-bold text-gray-900">{invoice.clientName}</p>
@@ -173,11 +173,11 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
       <table className="w-full mb-6">
         <thead>
           <tr className="border-b-2 border-gray-200">
-            <th className="text-left py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold">{t(locale, 'invoice.itemDescription')}</th>
-            <th className="text-center py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold w-16">{t(locale, 'invoice.itemUnit')}</th>
-            <th className="text-right py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold w-20">{t(locale, 'invoice.itemQuantity')}</th>
-            <th className="text-right py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold w-28">{t(locale, 'invoice.itemRate')}</th>
-            <th className="text-right py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold w-28">{t(locale, 'invoice.itemAmount')}</th>
+            <th className="text-left py-2 text-xs uppercase tracking-wide text-gray-600 font-semibold">{t(locale, 'invoice.itemDescription')}</th>
+            <th className="text-center py-2 text-xs uppercase tracking-wide text-gray-600 font-semibold w-16">{t(locale, 'invoice.itemUnit')}</th>
+            <th className="text-right py-2 text-xs uppercase tracking-wide text-gray-600 font-semibold w-20">{t(locale, 'invoice.itemQuantity')}</th>
+            <th className="text-right py-2 text-xs uppercase tracking-wide text-gray-600 font-semibold w-28">{t(locale, 'invoice.itemRate')}</th>
+            <th className="text-right py-2 text-xs uppercase tracking-wide text-gray-600 font-semibold w-28">{t(locale, 'invoice.itemAmount')}</th>
           </tr>
         </thead>
         <tbody>
@@ -223,7 +223,7 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
       <div className="bg-gray-50 rounded-lg p-3 mb-4">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-2">
+            <p className="text-xs uppercase tracking-wide text-gray-600 font-semibold mb-2">
               {t(locale, 'company.bankDetails')}
             </p>
             <div className="grid grid-cols-2 gap-2 text-sm">
@@ -250,7 +250,7 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
           {qrDataUrl && (
             <div className="text-center ml-4 flex-shrink-0">
               <img src={qrDataUrl} alt="Payment QR" className="w-28 h-28" />
-              <p className="text-[10px] text-gray-400 mt-1">
+              <p className="text-[10px] text-gray-600 mt-1">
                 {locale === 'en' ? 'Scan to pay' : 'Naskenujte pre platbu'}
               </p>
             </div>
@@ -268,13 +268,13 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
       {/* Notes & Terms */}
       {invoice.notes && (
         <div className="mb-3">
-          <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-0.5">{t(locale, 'invoice.notes')}</p>
+          <p className="text-xs uppercase tracking-wide text-gray-600 font-semibold mb-0.5">{t(locale, 'invoice.notes')}</p>
           <p className="text-gray-600 text-xs whitespace-pre-wrap">{invoice.notes}</p>
         </div>
       )}
       {invoice.terms && (
         <div className="mb-4">
-          <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-0.5">{t(locale, 'invoice.terms')}</p>
+          <p className="text-xs uppercase tracking-wide text-gray-600 font-semibold mb-0.5">{t(locale, 'invoice.terms')}</p>
           <p className="text-gray-500 text-xs whitespace-pre-wrap">{invoice.terms}</p>
         </div>
       )}
@@ -420,7 +420,7 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
             {qrDataUrl && (
               <div className="text-center ml-3 flex-shrink-0">
                 <img src={qrDataUrl} alt="Payment QR" className="w-24 h-24" />
-                <p className="text-[10px] text-gray-400 mt-0.5">
+                <p className="text-[10px] text-gray-600 mt-0.5">
                   {locale === 'en' ? 'Scan to pay' : 'Naskenujte'}
                 </p>
               </div>
@@ -497,7 +497,7 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
           {invoice.companyEmail && <p className="text-gray-600 text-xs mt-1">{invoice.companyEmail}</p>}
         </div>
         <div className="text-right">
-          <h1 className="text-2xl font-light text-gray-300 tracking-widest uppercase mb-4">
+          <h1 className="text-2xl font-light text-gray-500 tracking-widest uppercase mb-4">
             {locale === 'en' ? 'Invoice' : 'Faktúra'}
           </h1>
           <p className="text-gray-900 font-medium">{invoice.invoiceNumber}</p>
@@ -510,7 +510,7 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
 
       {/* Bill To */}
       <div className="mb-10">
-        <p className="text-gray-300 text-xs uppercase tracking-widest mb-3">{t(locale, 'invoice.to')}</p>
+        <p className="text-gray-500 text-xs uppercase tracking-widest mb-3">{t(locale, 'invoice.to')}</p>
         <p className="text-gray-900 font-medium">{invoice.clientName}</p>
         <p className="text-gray-700">{invoice.clientStreet}</p>
         <p className="text-gray-700">{invoice.clientCity}{invoice.clientState ? `, ${invoice.clientState}` : ''} {invoice.clientZip}</p>
@@ -520,7 +520,7 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
 
       {/* Items */}
       <div className="mb-10">
-        <div className="border-b border-gray-100 pb-2 mb-3 flex text-xs text-gray-300 uppercase tracking-widest">
+        <div className="border-b border-gray-100 pb-2 mb-3 flex text-xs text-gray-500 uppercase tracking-widest">
           <div className="flex-1">{t(locale, 'invoice.itemDescription')}</div>
           <div className="w-16 text-center">{t(locale, 'invoice.itemUnit')}</div>
           <div className="w-20 text-right">{t(locale, 'invoice.itemQuantity')}</div>
@@ -587,7 +587,7 @@ export function MinimalTemplate({ invoice, locale }: TemplateProps) {
           {qrDataUrl && (
             <div className="text-center flex-shrink-0">
               <img src={qrDataUrl} alt="Payment QR" className="w-24 h-24" />
-              <p className="text-[10px] text-gray-300 mt-0.5">
+              <p className="text-[10px] text-gray-500 mt-0.5">
                 {locale === 'en' ? 'Scan to pay' : 'Naskenujte'}
               </p>
             </div>
