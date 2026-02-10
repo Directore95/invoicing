@@ -78,30 +78,30 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
           <p className="text-blue-600 font-semibold mt-0.5">{invoice.invoiceNumber}</p>
         </div>
         <div className="text-right">
-          <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5">
+          <p className="text-gray-800 text-xs uppercase tracking-wide mb-0.5">
             {t(locale, 'invoice.invoiceDate')}
           </p>
-          <p className="font-medium">{formatDate(invoice.invoiceDate, locale)}</p>
-          <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
+          <p className="font-medium text-gray-900">{formatDate(invoice.invoiceDate, locale)}</p>
+          <p className="text-gray-800 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
             {t(locale, 'invoice.dueDate')}
           </p>
-          <p className="font-medium">{formatDate(invoice.dueDate, locale)}</p>
+          <p className="font-medium text-gray-900">{formatDate(invoice.dueDate, locale)}</p>
           {invoice.variableSymbol && locale === 'sk' && (
             <>
-              <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Variabilný symbol</p>
-              <p className="font-medium">{invoice.variableSymbol}</p>
+              <p className="text-gray-800 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Variabilný symbol</p>
+              <p className="font-medium text-gray-900">{invoice.variableSymbol}</p>
             </>
           )}
           {invoice.constantSymbol && locale === 'sk' && (
             <>
-              <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Konštantný symbol</p>
-              <p className="font-medium">{invoice.constantSymbol}</p>
+              <p className="text-gray-800 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Konštantný symbol</p>
+              <p className="font-medium text-gray-900">{invoice.constantSymbol}</p>
             </>
           )}
           {invoice.poNumber && locale === 'en' && (
             <>
-              <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">PO Number</p>
-              <p className="font-medium">{invoice.poNumber}</p>
+              <p className="text-gray-800 text-xs uppercase tracking-wide mb-0.5 mt-1.5">PO Number</p>
+              <p className="font-medium text-gray-900">{invoice.poNumber}</p>
             </>
           )}
         </div>
@@ -202,18 +202,18 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
       {/* Totals */}
       <div className="flex justify-end mb-6">
         <div className="w-72">
-          <div className="flex justify-between py-1.5 text-gray-800">
+          <div className="flex justify-between py-1.5 text-gray-900">
             <span>{t(locale, 'invoice.subtotal')}</span>
             <span>{formatCurrency(invoice.subtotal, locale)}</span>
           </div>
           {invoice.discount > 0 && (
-            <div className="flex justify-between py-1.5 text-gray-800">
+            <div className="flex justify-between py-1.5 text-gray-900">
               <span>{t(locale, 'invoice.discount')}</span>
               <span>-{invoice.discountType === 'percentage' ? `${invoice.discount}%` : formatCurrency(invoice.discount, locale)}</span>
             </div>
           )}
           {invoice.taxRate > 0 && (
-            <div className="flex justify-between py-1.5 text-gray-800">
+            <div className="flex justify-between py-1.5 text-gray-900">
               <span>{rc.taxName} ({invoice.taxRate}%)</span>
               <span>{formatCurrency(invoice.taxAmount, locale)}</span>
             </div>
@@ -350,32 +350,32 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
           </h3>
           <div className="space-y-1">
             <div className="flex justify-between">
-              <span className="text-gray-700">{t(locale, 'invoice.invoiceNumber')}:</span>
+              <span className="text-gray-900">{t(locale, 'invoice.invoiceNumber')}:</span>
               <span className="font-medium text-gray-900">{invoice.invoiceNumber}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-700">{t(locale, 'invoice.invoiceDate')}:</span>
+              <span className="text-gray-900">{t(locale, 'invoice.invoiceDate')}:</span>
               <span className="text-gray-900">{formatDate(invoice.invoiceDate, locale)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-700">{t(locale, 'invoice.dueDate')}:</span>
+              <span className="text-gray-900">{t(locale, 'invoice.dueDate')}:</span>
               <span className="text-gray-900">{formatDate(invoice.dueDate, locale)}</span>
             </div>
             {invoice.poNumber && locale === 'en' && (
               <div className="flex justify-between">
-                <span className="text-gray-700">PO #:</span>
+                <span className="text-gray-900">PO #:</span>
                 <span className="text-gray-900">{invoice.poNumber}</span>
               </div>
             )}
             {invoice.variableSymbol && locale === 'sk' && (
               <div className="flex justify-between">
-                <span className="text-gray-700">VS:</span>
+                <span className="text-gray-900">VS:</span>
                 <span className="text-gray-900">{invoice.variableSymbol}</span>
               </div>
             )}
             {invoice.constantSymbol && locale === 'sk' && (
               <div className="flex justify-between">
-                <span className="text-gray-700">KS:</span>
+                <span className="text-gray-900">KS:</span>
                 <span className="text-gray-900">{invoice.constantSymbol}</span>
               </div>
             )}
@@ -436,23 +436,23 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
 
         {/* Totals */}
         <div>
-          <div className="flex justify-between py-1.5 text-gray-800 text-sm">
+          <div className="flex justify-between py-1.5 text-gray-900 text-sm">
             <span>{t(locale, 'invoice.subtotal')}:</span>
             <span>{formatCurrency(invoice.subtotal, locale)}</span>
           </div>
           {invoice.discount > 0 && (
-            <div className="flex justify-between py-1.5 text-gray-800 text-sm">
+            <div className="flex justify-between py-1.5 text-gray-900 text-sm">
               <span>{t(locale, 'invoice.discount')}:</span>
               <span>-{invoice.discountType === 'percentage' ? `${invoice.discount}%` : formatCurrency(invoice.discount, locale)}</span>
             </div>
           )}
           {invoice.taxRate > 0 && (
-            <div className="flex justify-between py-1.5 text-gray-800 text-sm">
+            <div className="flex justify-between py-1.5 text-gray-900 text-sm">
               <span>{rc.taxName} ({invoice.taxRate}%):</span>
               <span>{formatCurrency(invoice.taxAmount, locale)}</span>
             </div>
           )}
-          <div className="flex justify-between py-2 border-t-2 border-gray-800 mt-2 text-lg font-bold">
+          <div className="flex justify-between py-2 border-t-2 border-gray-800 mt-2 text-lg font-bold text-gray-900">
             <span>{t(locale, 'invoice.total')}:</span>
             <span>{formatCurrency(invoice.total, locale)}</span>
           </div>
