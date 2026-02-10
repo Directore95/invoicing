@@ -92,10 +92,8 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Variabilný symbol</p>
               <p className="font-medium">{invoice.variableSymbol}</p>
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
-            </>
           )}
           {invoice.constantSymbol && locale === 'sk' && (
-            <>
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Konštantný symbol</p>
               <p className="font-medium">{invoice.constantSymbol}</p>
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
