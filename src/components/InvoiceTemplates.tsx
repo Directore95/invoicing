@@ -86,24 +86,22 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
             {t(locale, 'invoice.dueDate')}
           </p>
           <p className="font-medium">{formatDate(invoice.dueDate, locale)}</p>
-          <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
           {invoice.variableSymbol && locale === 'sk' && (
             <>
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Variabilný symbol</p>
               <p className="font-medium">{invoice.variableSymbol}</p>
-              <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
+            </>
           )}
           {invoice.constantSymbol && locale === 'sk' && (
+            <>
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Konštantný symbol</p>
               <p className="font-medium">{invoice.constantSymbol}</p>
-              <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
             </>
           )}
           {invoice.poNumber && locale === 'en' && (
             <>
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">PO Number</p>
               <p className="font-medium">{invoice.poNumber}</p>
-              <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
             </>
           )}
         </div>
