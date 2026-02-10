@@ -86,22 +86,26 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
             {t(locale, 'invoice.dueDate')}
           </p>
           <p className="font-medium">{formatDate(invoice.dueDate, locale)}</p>
+          <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
           {invoice.variableSymbol && locale === 'sk' && (
             <>
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Variabilný symbol</p>
               <p className="font-medium">{invoice.variableSymbol}</p>
+              <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
             </>
           )}
           {invoice.constantSymbol && locale === 'sk' && (
             <>
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Konštantný symbol</p>
               <p className="font-medium">{invoice.constantSymbol}</p>
+              <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
             </>
           )}
           {invoice.poNumber && locale === 'en' && (
             <>
               <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">PO Number</p>
               <p className="font-medium">{invoice.poNumber}</p>
+              <p className="text-gray-700 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
             </>
           )}
         </div>
@@ -325,7 +329,7 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
       {/* Invoice meta + Parties */}
       <div className="grid grid-cols-3 gap-6 mb-8">
         <div>
-          <h3 className="font-bold text-gray-800 border-b border-gray-300 pb-1 mb-2">{t(locale, 'invoice.from')}</h3>
+          <h3 className="font-bold text-gray-800 border-b border-gray-700 pb-1 mb-2">{t(locale, 'invoice.from')}</h3>
           <p className="font-semibold">{invoice.companyLegalName || invoice.companyName}</p>
           <p className="text-gray-700">{invoice.companyStreet}</p>
           <p className="text-gray-700">{invoice.companyCity}{invoice.companyState ? `, ${invoice.companyState}` : ''} {invoice.companyZip}</p>
@@ -335,7 +339,7 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
           {invoice.companyVatId && locale === 'sk' && <p className="text-gray-700">IČ DPH: {invoice.companyVatId}</p>}
         </div>
         <div>
-          <h3 className="font-bold text-gray-800 border-b border-gray-300 pb-1 mb-2">{t(locale, 'invoice.to')}</h3>
+          <h3 className="font-bold text-gray-800 border-b border-gray-700 pb-1 mb-2">{t(locale, 'invoice.to')}</h3>
           <p className="font-semibold">{invoice.clientName}</p>
           <p className="text-gray-700">{invoice.clientStreet}</p>
           <p className="text-gray-700">{invoice.clientCity}{invoice.clientState ? `, ${invoice.clientState}` : ''} {invoice.clientZip}</p>
