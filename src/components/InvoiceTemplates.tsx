@@ -326,23 +326,23 @@ export function ClassicTemplate({ invoice, locale }: TemplateProps) {
       <div className="grid grid-cols-3 gap-6 mb-8">
         <div>
           <h3 className="font-bold text-gray-800 border-b border-gray-700 pb-1 mb-2">{t(locale, 'invoice.from')}</h3>
-          <p className="font-semibold">{invoice.companyLegalName || invoice.companyName}</p>
-          <p className="text-gray-700">{invoice.companyStreet}</p>
-          <p className="text-gray-700">{invoice.companyCity}{invoice.companyState ? `, ${invoice.companyState}` : ''} {invoice.companyZip}</p>
-          <p className="text-gray-700">{invoice.companyCountry}</p>
-          {invoice.companyTaxId && <p className="text-gray-700 mt-1">{locale === 'en' ? 'EIN' : 'DIČ'}: {invoice.companyTaxId}</p>}
-          {invoice.companyRegistrationNumber && <p className="text-gray-700">{locale === 'en' ? 'Reg' : 'IČO'}: {invoice.companyRegistrationNumber}</p>}
-          {invoice.companyVatId && locale === 'sk' && <p className="text-gray-700">IČ DPH: {invoice.companyVatId}</p>}
+          <p className="font-semibold text-gray-900">{invoice.companyLegalName || invoice.companyName}</p>
+          <p className="text-gray-900">{invoice.companyStreet}</p>
+          <p className="text-gray-900">{invoice.companyCity}{invoice.companyState ? `, ${invoice.companyState}` : ''} {invoice.companyZip}</p>
+          <p className="text-gray-900">{invoice.companyCountry}</p>
+          {invoice.companyTaxId && <p className="text-gray-900 mt-1">{locale === 'en' ? 'EIN' : 'DIČ'}: {invoice.companyTaxId}</p>}
+          {invoice.companyRegistrationNumber && <p className="text-gray-900">{locale === 'en' ? 'Reg' : 'IČO'}: {invoice.companyRegistrationNumber}</p>}
+          {invoice.companyVatId && locale === 'sk' && <p className="text-gray-900">IČ DPH: {invoice.companyVatId}</p>}
         </div>
         <div>
           <h3 className="font-bold text-gray-800 border-b border-gray-700 pb-1 mb-2">{t(locale, 'invoice.to')}</h3>
-          <p className="font-semibold">{invoice.clientName}</p>
-          <p className="text-gray-700">{invoice.clientStreet}</p>
-          <p className="text-gray-700">{invoice.clientCity}{invoice.clientState ? `, ${invoice.clientState}` : ''} {invoice.clientZip}</p>
-          <p className="text-gray-700">{invoice.clientCountry}</p>
-          {invoice.clientTaxId && <p className="text-gray-700 mt-1">{locale === 'en' ? 'Tax ID' : 'DIČ'}: {invoice.clientTaxId}</p>}
-          {invoice.clientRegistrationNumber && locale === 'sk' && <p className="text-gray-700">IČO: {invoice.clientRegistrationNumber}</p>}
-          {invoice.clientVatId && locale === 'sk' && <p className="text-gray-700">IČ DPH: {invoice.clientVatId}</p>}
+          <p className="font-semibold text-gray-900">{invoice.clientName}</p>
+          <p className="text-gray-900">{invoice.clientStreet}</p>
+          <p className="text-gray-900">{invoice.clientCity}{invoice.clientState ? `, ${invoice.clientState}` : ''} {invoice.clientZip}</p>
+          <p className="text-gray-900">{invoice.clientCountry}</p>
+          {invoice.clientTaxId && <p className="text-gray-900 mt-1">{locale === 'en' ? 'Tax ID' : 'DIČ'}: {invoice.clientTaxId}</p>}
+          {invoice.clientRegistrationNumber && locale === 'sk' && <p className="text-gray-900">IČO: {invoice.clientRegistrationNumber}</p>}
+          {invoice.clientVatId && locale === 'sk' && <p className="text-gray-900">IČ DPH: {invoice.clientVatId}</p>}
         </div>
         <div>
           <h3 className="font-bold text-gray-800 border-b border-gray-300 pb-1 mb-2">
