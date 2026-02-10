@@ -350,7 +350,7 @@ export const translations = {
       bankAccountLabel: 'IBAN',
       routingLabel: 'BIC/SWIFT',
       paymentNote: 'Úhradu vykonajte na účet',
-      latePaymentNote: 'V prípade omeškania s úhradou si vyhradzujeme právo účtovať úrok z omeškania podľa § 369 Obchodného zákonníka.',
+      latePaymentNote: 'V prípade omeškania s úhradou je dodávateľ oprávnený účtovať úrok z omeškania podľa § 369 ods. 2 zákona č. 513/1991 Zb. (Obchodný zákonník) v spojení s nariadením vlády SR č. 21/2013 Z. z.',
     },
   },
 } as const;
@@ -423,7 +423,7 @@ export const regionConfig = {
       poNumber: null,
     },
     paymentMethods: ['Bankový prevod', 'Hotovosť', 'Dobierka', 'PayPal'],
-    defaultTerms: 'Faktúra je splatná v uvedenej lehote splatnosti. V prípade omeškania s úhradou si vyhradzujeme právo účtovať zákonný úrok z omeškania.',
+    defaultTerms: 'Faktúra je splatná v lehote splatnosti uvedenej na faktúre. V prípade omeškania s úhradou je dodávateľ oprávnený účtovať úrok z omeškania vo výške stanovenej podľa § 369 ods. 2 zákona č. 513/1991 Zb. (Obchodný zákonník) v spojení s nariadením vlády SR č. 21/2013 Z. z. Neuhradenie faktúry v lehote splatnosti sa považuje za podstatné porušenie zmluvy.',
   },
 } as const;
 

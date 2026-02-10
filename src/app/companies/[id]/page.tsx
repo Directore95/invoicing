@@ -45,13 +45,16 @@ export default function CompanyFormPage() {
   const router = useRouter();
   const { settings, companies, addCompany, updateCompany } = useStore();
   const locale = settings.locale;
-  const rc = regionConfig[locale];
   const isNew = params.id === 'new';
 
   const existing = !isNew ? companies.find((c) => c.id === params.id) : null;
   const [form, setForm] = useState<Omit<Company, 'id' | 'createdAt' | 'updatedAt'>>(
     existing ? { ...existing } : emptyCompany(locale)
   );
+
+  // Use the company's own locale for region-specific fields
+  const companyLocale = form.locale;
+  const companyRc = regionConfig[companyLocale];
 
   useEffect(() => {
     if (!isNew && !existing) {
@@ -61,6 +64,18 @@ export default function CompanyFormPage() {
 
   const updateField = (field: string, value: string | number | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleLocaleSwitch = (newLocale: Locale) => {
+    const newRc = regionConfig[newLocale];
+    setForm((prev) => ({
+      ...prev,
+      locale: newLocale,
+      currency: newRc.currency,
+      country: newLocale === 'en' ? 'United States' : 'Slovensko',
+      defaultTaxRate: newRc.defaultTaxRate,
+      defaultTerms: prev.defaultTerms === regionConfig[prev.locale].defaultTerms ? newRc.defaultTerms : prev.defaultTerms,
+    }));
   };
 
   const handleSave = () => {
@@ -98,6 +113,60 @@ export default function CompanyFormPage() {
         </div>
 
         <div className="space-y-8">
+          {/* Company Locale Toggle */}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+              {locale === 'en' ? 'Company Region' : 'Región spoločnosti'}
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mb-4">
+              {locale === 'en'
+                ? 'Select which region this company operates in. This determines the currency, tax fields, and bank details format.'
+                : 'Vyberte región, v ktorom spoločnosť pôsobí. Určuje menu, daňové polia a formát bankových údajov.'}
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => handleLocaleSwitch('en')}
+                className={`flex items-center gap-3 px-5 py-3 rounded-lg border-2 transition-all ${
+                  companyLocale === 'en'
+                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                    : 'border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300'
+                }`}
+              >
+                <span className="text-2xl">🇺🇸</span>
+                <div className="text-left">
+                  <p className="font-semibold text-sm">US Version</p>
+                  <p className="text-xs opacity-75">USD, EIN, Routing #</p>
+                </div>
+                {companyLocale === 'en' && (
+                  <svg className="w-5 h-5 ml-2 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleLocaleSwitch('sk')}
+                className={`flex items-center gap-3 px-5 py-3 rounded-lg border-2 transition-all ${
+                  companyLocale === 'sk'
+                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                    : 'border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-400 hover:border-gray-300'
+                }`}
+              >
+                <span className="text-2xl">🇸🇰</span>
+                <div className="text-left">
+                  <p className="font-semibold text-sm">SK Verzia</p>
+                  <p className="text-xs opacity-75">EUR, IČO, IBAN</p>
+                </div>
+                {companyLocale === 'sk' && (
+                  <svg className="w-5 h-5 ml-2 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+
           {/* Business Details */}
           <Section title={t(locale, 'company.businessDetails')}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -105,30 +174,30 @@ export default function CompanyFormPage() {
               <Input label={t(locale, 'company.legalName')} value={form.legalName} onChange={(v) => updateField('legalName', v)} />
 
               {/* Region-specific business IDs */}
-              {rc.companyFields.taxId && (
+              {companyRc.companyFields.taxId && (
                 <Input
-                  label={rc.companyFields.taxId.label}
+                  label={companyRc.companyFields.taxId.label}
                   value={form.taxId}
                   onChange={(v) => updateField('taxId', v)}
-                  placeholder={rc.companyFields.taxId.placeholder}
-                  required={rc.companyFields.taxId.required}
+                  placeholder={companyRc.companyFields.taxId.placeholder}
+                  required={companyRc.companyFields.taxId.required}
                 />
               )}
-              {rc.companyFields.registrationNumber && (
+              {companyRc.companyFields.registrationNumber && (
                 <Input
-                  label={rc.companyFields.registrationNumber.label}
+                  label={companyRc.companyFields.registrationNumber.label}
                   value={form.registrationNumber}
                   onChange={(v) => updateField('registrationNumber', v)}
-                  placeholder={rc.companyFields.registrationNumber.placeholder}
-                  required={rc.companyFields.registrationNumber.required}
+                  placeholder={companyRc.companyFields.registrationNumber.placeholder}
+                  required={companyRc.companyFields.registrationNumber.required}
                 />
               )}
-              {rc.companyFields.vatId && (
+              {companyRc.companyFields.vatId && (
                 <Input
-                  label={rc.companyFields.vatId.label}
+                  label={companyRc.companyFields.vatId.label}
                   value={form.vatId}
                   onChange={(v) => { updateField('vatId', v); updateField('icdph', v); }}
-                  placeholder={rc.companyFields.vatId.placeholder}
+                  placeholder={companyRc.companyFields.vatId.placeholder}
                 />
               )}
             </div>
@@ -160,36 +229,36 @@ export default function CompanyFormPage() {
           <Section title={t(locale, 'company.bankDetails')}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input label={t(locale, 'company.bankName')} value={form.bankName} onChange={(v) => updateField('bankName', v)} />
-              {rc.bankFields.accountNumber && (
+              {companyRc.bankFields.accountNumber && (
                 <Input
-                  label={rc.bankFields.accountNumber.label}
+                  label={companyRc.bankFields.accountNumber.label}
                   value={form.bankAccount}
                   onChange={(v) => updateField('bankAccount', v)}
-                  placeholder={rc.bankFields.accountNumber.placeholder}
+                  placeholder={companyRc.bankFields.accountNumber.placeholder}
                 />
               )}
-              {rc.bankFields.routingNumber && (
+              {companyRc.bankFields.routingNumber && (
                 <Input
-                  label={rc.bankFields.routingNumber.label}
+                  label={companyRc.bankFields.routingNumber.label}
                   value={form.routingNumber}
                   onChange={(v) => updateField('routingNumber', v)}
-                  placeholder={rc.bankFields.routingNumber.placeholder}
+                  placeholder={companyRc.bankFields.routingNumber.placeholder}
                 />
               )}
-              {rc.bankFields.iban && (
+              {companyRc.bankFields.iban && (
                 <Input
-                  label={rc.bankFields.iban.label}
+                  label={companyRc.bankFields.iban.label}
                   value={form.iban}
                   onChange={(v) => updateField('iban', v)}
-                  placeholder={rc.bankFields.iban.placeholder}
+                  placeholder={companyRc.bankFields.iban.placeholder}
                 />
               )}
-              {rc.bankFields.swift && (
+              {companyRc.bankFields.swift && (
                 <Input
-                  label={rc.bankFields.swift.label}
+                  label={companyRc.bankFields.swift.label}
                   value={form.swiftCode}
                   onChange={(v) => updateField('swiftCode', v)}
-                  placeholder={rc.bankFields.swift.placeholder}
+                  placeholder={companyRc.bankFields.swift.placeholder}
                 />
               )}
             </div>

@@ -18,7 +18,7 @@ function usePaymentQR(invoice: Invoice, locale: Locale) {
   return qrDataUrl;
 }
 
-/** Stamp + Signature overlay: stamp at 60% opacity behind signature */
+/** Stamp + Signature overlay: stamp at 35% opacity behind signature */
 function SignatureStampBlock({ invoice, locale, align = 'right' }: TemplateProps & { align?: 'left' | 'right' }) {
   const hasStamp = !!invoice.companyStamp;
   const hasSignature = !!invoice.companySignature;
@@ -32,7 +32,7 @@ function SignatureStampBlock({ invoice, locale, align = 'right' }: TemplateProps
             src={invoice.companyStamp}
             alt="Stamp"
             className="absolute inset-0 w-full h-full object-contain"
-            style={{ opacity: 0.6 }}
+            style={{ opacity: 0.35 }}
           />
         )}
         {hasSignature && (
@@ -59,42 +59,42 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
   const qrDataUrl = usePaymentQR(invoice, locale);
 
   return (
-    <div className="bg-white p-8 max-w-[210mm] mx-auto text-sm" id="invoice-content">
+    <div className="bg-white p-6 max-w-[210mm] mx-auto text-sm" id="invoice-content">
       {/* Header */}
-      <div className="flex justify-between items-start mb-8">
+      <div className="flex justify-between items-start mb-6">
         <div>
           {invoice.companyLogo && (
-            <img src={invoice.companyLogo} alt="Logo" className="h-16 mb-3 object-contain" />
+            <img src={invoice.companyLogo} alt="Logo" className="h-14 mb-2 object-contain" />
           )}
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900">
             {locale === 'en' ? 'INVOICE' : 'FAKTÚRA'}
           </h1>
-          <p className="text-blue-600 font-semibold mt-1">{invoice.invoiceNumber}</p>
+          <p className="text-blue-600 font-semibold mt-0.5">{invoice.invoiceNumber}</p>
         </div>
         <div className="text-right">
-          <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
+          <p className="text-gray-500 text-xs uppercase tracking-wide mb-0.5">
             {t(locale, 'invoice.invoiceDate')}
           </p>
           <p className="font-medium">{formatDate(invoice.invoiceDate, locale)}</p>
-          <p className="text-gray-500 text-xs uppercase tracking-wide mb-1 mt-2">
+          <p className="text-gray-500 text-xs uppercase tracking-wide mb-0.5 mt-1.5">
             {t(locale, 'invoice.dueDate')}
           </p>
           <p className="font-medium">{formatDate(invoice.dueDate, locale)}</p>
           {invoice.variableSymbol && locale === 'sk' && (
             <>
-              <p className="text-gray-500 text-xs uppercase tracking-wide mb-1 mt-2">Variabilný symbol</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Variabilný symbol</p>
               <p className="font-medium">{invoice.variableSymbol}</p>
             </>
           )}
           {invoice.constantSymbol && locale === 'sk' && (
             <>
-              <p className="text-gray-500 text-xs uppercase tracking-wide mb-1 mt-2">Konštantný symbol</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wide mb-0.5 mt-1.5">Konštantný symbol</p>
               <p className="font-medium">{invoice.constantSymbol}</p>
             </>
           )}
           {invoice.poNumber && locale === 'en' && (
             <>
-              <p className="text-gray-500 text-xs uppercase tracking-wide mb-1 mt-2">PO Number</p>
+              <p className="text-gray-500 text-xs uppercase tracking-wide mb-0.5 mt-1.5">PO Number</p>
               <p className="font-medium">{invoice.poNumber}</p>
             </>
           )}
@@ -102,10 +102,10 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
       </div>
 
       {/* Blue accent bar */}
-      <div className="h-1 bg-blue-600 mb-8 rounded-full" />
+      <div className="h-0.5 bg-blue-600 mb-6 rounded-full" />
 
       {/* Parties */}
-      <div className="grid grid-cols-2 gap-8 mb-8">
+      <div className="grid grid-cols-2 gap-6 mb-6">
         <div>
           <p className="text-xs uppercase tracking-wide text-gray-400 mb-2 font-semibold">
             {t(locale, 'invoice.from')}
@@ -170,57 +170,57 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
       </div>
 
       {/* Items Table */}
-      <table className="w-full mb-8">
+      <table className="w-full mb-6">
         <thead>
           <tr className="border-b-2 border-gray-200">
-            <th className="text-left py-3 text-xs uppercase tracking-wide text-gray-400 font-semibold">{t(locale, 'invoice.itemDescription')}</th>
-            <th className="text-center py-3 text-xs uppercase tracking-wide text-gray-400 font-semibold w-16">{t(locale, 'invoice.itemUnit')}</th>
-            <th className="text-right py-3 text-xs uppercase tracking-wide text-gray-400 font-semibold w-20">{t(locale, 'invoice.itemQuantity')}</th>
-            <th className="text-right py-3 text-xs uppercase tracking-wide text-gray-400 font-semibold w-28">{t(locale, 'invoice.itemRate')}</th>
-            <th className="text-right py-3 text-xs uppercase tracking-wide text-gray-400 font-semibold w-28">{t(locale, 'invoice.itemAmount')}</th>
+            <th className="text-left py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold">{t(locale, 'invoice.itemDescription')}</th>
+            <th className="text-center py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold w-16">{t(locale, 'invoice.itemUnit')}</th>
+            <th className="text-right py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold w-20">{t(locale, 'invoice.itemQuantity')}</th>
+            <th className="text-right py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold w-28">{t(locale, 'invoice.itemRate')}</th>
+            <th className="text-right py-2 text-xs uppercase tracking-wide text-gray-400 font-semibold w-28">{t(locale, 'invoice.itemAmount')}</th>
           </tr>
         </thead>
         <tbody>
           {invoice.items.map((item, idx) => (
             <tr key={item.id} className={idx % 2 === 0 ? 'bg-gray-50' : ''}>
-              <td className="py-3 px-2 text-gray-800">{item.description}</td>
-              <td className="py-3 px-2 text-center text-gray-600">{item.unit}</td>
-              <td className="py-3 px-2 text-right text-gray-600">{item.quantity}</td>
-              <td className="py-3 px-2 text-right text-gray-600">{formatCurrency(item.rate, locale)}</td>
-              <td className="py-3 px-2 text-right font-medium text-gray-800">{formatCurrency(item.amount, locale)}</td>
+              <td className="py-2 px-2 text-gray-800">{item.description}</td>
+              <td className="py-2 px-2 text-center text-gray-600">{item.unit}</td>
+              <td className="py-2 px-2 text-right text-gray-600">{item.quantity}</td>
+              <td className="py-2 px-2 text-right text-gray-600">{formatCurrency(item.rate, locale)}</td>
+              <td className="py-2 px-2 text-right font-medium text-gray-800">{formatCurrency(item.amount, locale)}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
       {/* Totals */}
-      <div className="flex justify-end mb-8">
+      <div className="flex justify-end mb-6">
         <div className="w-72">
-          <div className="flex justify-between py-2 text-gray-600">
+          <div className="flex justify-between py-1.5 text-gray-600">
             <span>{t(locale, 'invoice.subtotal')}</span>
             <span>{formatCurrency(invoice.subtotal, locale)}</span>
           </div>
           {invoice.discount > 0 && (
-            <div className="flex justify-between py-2 text-gray-600">
+            <div className="flex justify-between py-1.5 text-gray-600">
               <span>{t(locale, 'invoice.discount')}</span>
               <span>-{invoice.discountType === 'percentage' ? `${invoice.discount}%` : formatCurrency(invoice.discount, locale)}</span>
             </div>
           )}
           {invoice.taxRate > 0 && (
-            <div className="flex justify-between py-2 text-gray-600">
+            <div className="flex justify-between py-1.5 text-gray-600">
               <span>{rc.taxName} ({invoice.taxRate}%)</span>
               <span>{formatCurrency(invoice.taxAmount, locale)}</span>
             </div>
           )}
-          <div className="flex justify-between py-3 border-t-2 border-blue-600 mt-2">
-            <span className="font-bold text-lg text-gray-900">{t(locale, 'invoice.total')}</span>
-            <span className="font-bold text-lg text-blue-600">{formatCurrency(invoice.total, locale)}</span>
+          <div className="flex justify-between py-2 border-t-2 border-blue-600 mt-1">
+            <span className="font-bold text-gray-900">{t(locale, 'invoice.total')}</span>
+            <span className="font-bold text-blue-600">{formatCurrency(invoice.total, locale)}</span>
           </div>
         </div>
       </div>
 
       {/* Bank Details + QR Code */}
-      <div className="bg-gray-50 rounded-lg p-4 mb-6">
+      <div className="bg-gray-50 rounded-lg p-3 mb-4">
         <div className="flex justify-between items-start">
           <div>
             <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-2">
@@ -260,27 +260,27 @@ export function ModernTemplate({ invoice, locale }: TemplateProps) {
 
       {/* Payment method */}
       {invoice.paymentMethod && (
-        <p className="text-gray-800 mb-4 text-sm">
+        <p className="text-gray-800 mb-3 text-sm">
           <span className="text-gray-500">{t(locale, 'invoice.paymentMethod')}: </span>{invoice.paymentMethod}
         </p>
       )}
 
       {/* Notes & Terms */}
       {invoice.notes && (
-        <div className="mb-4">
-          <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-1">{t(locale, 'invoice.notes')}</p>
-          <p className="text-gray-600 text-sm whitespace-pre-wrap">{invoice.notes}</p>
+        <div className="mb-3">
+          <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-0.5">{t(locale, 'invoice.notes')}</p>
+          <p className="text-gray-600 text-xs whitespace-pre-wrap">{invoice.notes}</p>
         </div>
       )}
       {invoice.terms && (
-        <div className="mb-6">
-          <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-1">{t(locale, 'invoice.terms')}</p>
+        <div className="mb-4">
+          <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-0.5">{t(locale, 'invoice.terms')}</p>
           <p className="text-gray-500 text-xs whitespace-pre-wrap">{invoice.terms}</p>
         </div>
       )}
 
       {/* Signature & Stamp overlay */}
-      <div className="flex justify-end items-end mt-8 pt-6 border-t border-gray-200">
+      <div className="flex justify-end items-end mt-6 pt-4 border-t border-gray-200">
         <SignatureStampBlock invoice={invoice} locale={locale} />
       </div>
     </div>
