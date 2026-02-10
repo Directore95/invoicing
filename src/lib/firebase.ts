@@ -1,6 +1,11 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import {
+  getFirestore,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCVO_JyJf3QYmnx84mFEbl8H8JR9lWSKy4",
@@ -15,5 +20,23 @@ const firebaseConfig = {
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+// Initialize Firestore with persistent local cache for offline support.
+// This ensures data loads instantly on refresh from IndexedDB cache,
+// then syncs with the server in the background.
+function createFirestore() {
+  try {
+    return initializeFirestore(app, {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager(),
+      }),
+    });
+  } catch {
+    // If Firestore was already initialized (e.g. HMR), get the existing instance
+    return getFirestore(app);
+  }
+}
+
+export const db = createFirestore();
+
 export const googleProvider = new GoogleAuthProvider();

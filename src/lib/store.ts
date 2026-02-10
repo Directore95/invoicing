@@ -8,7 +8,6 @@ import {
   deleteDoc,
   onSnapshot,
   query,
-  getDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { Company, Invoice, InvoiceStatus, AppSettings, defaultSettings } from './types';
@@ -37,6 +36,12 @@ function partnersCol(userId: string) {
 }
 function partnerDoc(userId: string, partnerId: string) {
   return doc(db, 'users', userId, 'partners', partnerId);
+}
+
+/** Log and surface Firestore errors */
+function handleFirestoreError(operation: string, error: unknown) {
+  const msg = error instanceof Error ? error.message : String(error);
+  console.error(`[Firestore] ${operation} failed:`, msg, error);
 }
 
 // ============================================================
@@ -143,7 +148,9 @@ export const useStore = create<AppStore>()((set, get) => ({
     const { userId, settings } = get();
     if (userId) {
       const merged = { ...settings, ...updates };
-      setDoc(userDoc(userId), { ...merged, userId }, { merge: true });
+      setDoc(userDoc(userId), { ...merged, userId }, { merge: true }).catch((e) =>
+        handleFirestoreError('updateSettings', e)
+      );
     }
   },
   setLocale: (locale) => {
@@ -170,7 +177,9 @@ export const useStore = create<AppStore>()((set, get) => ({
     set((state) => ({ companies: [...state.companies, company] }));
     // Persist
     if (userId) {
-      setDoc(companyDoc(userId, id), { ...company, userId });
+      setDoc(companyDoc(userId, id), { ...company, userId }).catch((e) =>
+        handleFirestoreError('addCompany', e)
+      );
     }
     return company;
   },
@@ -182,13 +191,19 @@ export const useStore = create<AppStore>()((set, get) => ({
     }));
     const { userId } = get();
     if (userId) {
-      updateDoc(companyDoc(userId, id), { ...data, updatedAt: new Date().toISOString() });
+      updateDoc(companyDoc(userId, id), { ...data, updatedAt: new Date().toISOString() }).catch(
+        (e) => handleFirestoreError('updateCompany', e)
+      );
     }
   },
   deleteCompany: (id) => {
     set((state) => ({ companies: state.companies.filter((c) => c.id !== id) }));
     const { userId } = get();
-    if (userId) deleteDoc(companyDoc(userId, id));
+    if (userId) {
+      deleteDoc(companyDoc(userId, id)).catch((e) =>
+        handleFirestoreError('deleteCompany', e)
+      );
+    }
   },
   setDefaultCompany: (id) => {
     const { companies, userId } = get();
@@ -196,7 +211,9 @@ export const useStore = create<AppStore>()((set, get) => ({
     set({ companies: updated });
     if (userId) {
       updated.forEach((c) => {
-        updateDoc(companyDoc(userId, c.id), { isDefault: c.isDefault });
+        updateDoc(companyDoc(userId, c.id), { isDefault: c.isDefault }).catch((e) =>
+          handleFirestoreError('setDefaultCompany', e)
+        );
       });
     }
   },
@@ -220,7 +237,9 @@ export const useStore = create<AppStore>()((set, get) => ({
     };
     set((state) => ({ partners: [...state.partners, partner] }));
     if (userId) {
-      setDoc(partnerDoc(userId, id), partner);
+      setDoc(partnerDoc(userId, id), partner).catch((e) =>
+        handleFirestoreError('addPartner', e)
+      );
     }
     return partner;
   },
@@ -232,13 +251,19 @@ export const useStore = create<AppStore>()((set, get) => ({
     }));
     const { userId } = get();
     if (userId) {
-      updateDoc(partnerDoc(userId, id), { ...data, updatedAt: new Date().toISOString() });
+      updateDoc(partnerDoc(userId, id), { ...data, updatedAt: new Date().toISOString() }).catch(
+        (e) => handleFirestoreError('updatePartner', e)
+      );
     }
   },
   deletePartner: (id) => {
     set((state) => ({ partners: state.partners.filter((p) => p.id !== id) }));
     const { userId } = get();
-    if (userId) deleteDoc(partnerDoc(userId, id));
+    if (userId) {
+      deleteDoc(partnerDoc(userId, id)).catch((e) =>
+        handleFirestoreError('deletePartner', e)
+      );
+    }
   },
 
   // Invoices
@@ -261,10 +286,14 @@ export const useStore = create<AppStore>()((set, get) => ({
       },
     }));
     if (userId) {
-      setDoc(invoiceDoc(userId, id), { ...invoice, userId });
+      setDoc(invoiceDoc(userId, id), { ...invoice, userId }).catch((e) =>
+        handleFirestoreError('addInvoice', e)
+      );
       // Also update the next invoice number in settings
       const { settings } = get();
-      setDoc(userDoc(userId), { ...settings, userId }, { merge: true });
+      setDoc(userDoc(userId), { ...settings, userId }, { merge: true }).catch((e) =>
+        handleFirestoreError('addInvoice:settings', e)
+      );
     }
     return invoice;
   },
@@ -276,13 +305,19 @@ export const useStore = create<AppStore>()((set, get) => ({
     }));
     const { userId } = get();
     if (userId) {
-      updateDoc(invoiceDoc(userId, id), { ...data, updatedAt: new Date().toISOString() });
+      updateDoc(invoiceDoc(userId, id), { ...data, updatedAt: new Date().toISOString() }).catch(
+        (e) => handleFirestoreError('updateInvoice', e)
+      );
     }
   },
   deleteInvoice: (id) => {
     set((state) => ({ invoices: state.invoices.filter((inv) => inv.id !== id) }));
     const { userId } = get();
-    if (userId) deleteDoc(invoiceDoc(userId, id));
+    if (userId) {
+      deleteDoc(invoiceDoc(userId, id)).catch((e) =>
+        handleFirestoreError('deleteInvoice', e)
+      );
+    }
   },
   cloneInvoice: (id) => {
     const state = get();
@@ -315,9 +350,13 @@ export const useStore = create<AppStore>()((set, get) => ({
     }));
     const { userId } = get();
     if (userId) {
-      setDoc(invoiceDoc(userId, newId), { ...cloned, userId });
+      setDoc(invoiceDoc(userId, newId), { ...cloned, userId }).catch((e) =>
+        handleFirestoreError('cloneInvoice', e)
+      );
       const { settings } = get();
-      setDoc(userDoc(userId), { ...settings, userId }, { merge: true });
+      setDoc(userDoc(userId), { ...settings, userId }, { merge: true }).catch((e) =>
+        handleFirestoreError('cloneInvoice:settings', e)
+      );
     }
     return cloned;
   },
@@ -335,7 +374,9 @@ export const useStore = create<AppStore>()((set, get) => ({
     if (userId) {
       const inv = get().invoices.find((i) => i.id === id);
       if (inv) {
-        updateDoc(invoiceDoc(userId, id), { status, paidAt: inv.paidAt, updatedAt: now });
+        updateDoc(invoiceDoc(userId, id), { status, paidAt: inv.paidAt, updatedAt: now }).catch(
+          (e) => handleFirestoreError('updateInvoiceStatus', e)
+        );
       }
     }
   },
@@ -350,61 +391,113 @@ export const useStore = create<AppStore>()((set, get) => ({
   _unsubscribers: [],
   subscribeToFirestore: (userId: string) => {
     const unsubs: (() => void)[] = [];
+    let settingsReady = false;
+    let companiesReady = false;
+    let invoicesReady = false;
+    let partnersReady = false;
+
+    const checkReady = () => {
+      if (settingsReady && companiesReady && invoicesReady && partnersReady) {
+        set({ firestoreReady: true });
+      }
+    };
 
     // Listen to user settings
-    const unsubSettings = onSnapshot(userDoc(userId), (snap) => {
-      if (snap.exists()) {
-        const data = snap.data();
-        const settings: AppSettings = {
-          locale: data.locale || defaultSettings.locale,
-          invoicePrefix: data.invoicePrefix || defaultSettings.invoicePrefix,
-          nextInvoiceNumber: data.nextInvoiceNumber ?? defaultSettings.nextInvoiceNumber,
-          defaultTaxRate: data.defaultTaxRate ?? defaultSettings.defaultTaxRate,
-          defaultPaymentTerms: data.defaultPaymentTerms ?? defaultSettings.defaultPaymentTerms,
-          defaultNotes: data.defaultNotes || defaultSettings.defaultNotes,
-          defaultTerms: data.defaultTerms || defaultSettings.defaultTerms,
-          defaultTemplate: data.defaultTemplate || defaultSettings.defaultTemplate,
-          theme: data.theme || defaultSettings.theme,
-        };
-        set({ settings });
-      } else {
-        // First login - create settings doc
-        setDoc(userDoc(userId), { ...defaultSettings, userId });
+    const unsubSettings = onSnapshot(
+      userDoc(userId),
+      (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          const settings: AppSettings = {
+            locale: data.locale || defaultSettings.locale,
+            invoicePrefix: data.invoicePrefix || defaultSettings.invoicePrefix,
+            nextInvoiceNumber: data.nextInvoiceNumber ?? defaultSettings.nextInvoiceNumber,
+            defaultTaxRate: data.defaultTaxRate ?? defaultSettings.defaultTaxRate,
+            defaultPaymentTerms: data.defaultPaymentTerms ?? defaultSettings.defaultPaymentTerms,
+            defaultNotes: data.defaultNotes || defaultSettings.defaultNotes,
+            defaultTerms: data.defaultTerms || defaultSettings.defaultTerms,
+            defaultTemplate: data.defaultTemplate || defaultSettings.defaultTemplate,
+            theme: data.theme || defaultSettings.theme,
+          };
+          set({ settings });
+        } else {
+          // First login - create settings doc
+          setDoc(userDoc(userId), { ...defaultSettings, userId }).catch((e) =>
+            handleFirestoreError('initSettings', e)
+          );
+        }
+        settingsReady = true;
+        checkReady();
+      },
+      (error) => {
+        handleFirestoreError('onSnapshot:settings', error);
+        settingsReady = true;
+        checkReady();
       }
-    });
+    );
     unsubs.push(unsubSettings);
 
     // Listen to companies
-    const unsubCompanies = onSnapshot(query(companiesCol(userId)), (snap) => {
-      const companies: Company[] = snap.docs.map((d) => {
-        const data = d.data();
-        return { ...data, id: d.id } as Company;
-      });
-      set({ companies });
-    });
+    const unsubCompanies = onSnapshot(
+      query(companiesCol(userId)),
+      (snap) => {
+        const companies: Company[] = snap.docs.map((d) => {
+          const data = d.data();
+          return { ...data, id: d.id } as Company;
+        });
+        set({ companies });
+        companiesReady = true;
+        checkReady();
+      },
+      (error) => {
+        handleFirestoreError('onSnapshot:companies', error);
+        companiesReady = true;
+        checkReady();
+      }
+    );
     unsubs.push(unsubCompanies);
 
     // Listen to invoices
-    const unsubInvoices = onSnapshot(query(invoicesCol(userId)), (snap) => {
-      const invoices: Invoice[] = snap.docs.map((d) => {
-        const data = d.data();
-        return { ...data, id: d.id } as Invoice;
-      });
-      set({ invoices });
-    });
+    const unsubInvoices = onSnapshot(
+      query(invoicesCol(userId)),
+      (snap) => {
+        const invoices: Invoice[] = snap.docs.map((d) => {
+          const data = d.data();
+          return { ...data, id: d.id } as Invoice;
+        });
+        set({ invoices });
+        invoicesReady = true;
+        checkReady();
+      },
+      (error) => {
+        handleFirestoreError('onSnapshot:invoices', error);
+        invoicesReady = true;
+        checkReady();
+      }
+    );
     unsubs.push(unsubInvoices);
 
     // Listen to partners
-    const unsubPartners = onSnapshot(query(partnersCol(userId)), (snap) => {
-      const partners: Partner[] = snap.docs.map((d) => {
-        const data = d.data();
-        return { ...data, id: d.id } as Partner;
-      });
-      set({ partners });
-    });
+    const unsubPartners = onSnapshot(
+      query(partnersCol(userId)),
+      (snap) => {
+        const partners: Partner[] = snap.docs.map((d) => {
+          const data = d.data();
+          return { ...data, id: d.id } as Partner;
+        });
+        set({ partners });
+        partnersReady = true;
+        checkReady();
+      },
+      (error) => {
+        handleFirestoreError('onSnapshot:partners', error);
+        partnersReady = true;
+        checkReady();
+      }
+    );
     unsubs.push(unsubPartners);
 
-    set({ _unsubscribers: unsubs, firestoreReady: true });
+    set({ _unsubscribers: unsubs });
   },
 
   unsubscribeFromFirestore: () => {
